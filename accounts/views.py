@@ -12,6 +12,15 @@ from django.contrib import messages
 from django.contrib.auth.models import User, auth
 # Create your views here.
 
+def myprojects(request):
+    return render(request,'myprojects.html')  
+
+def profile(request):
+    return render(request,'profile.html')  
+
+def timetable(request):
+    return render(request,'timetable.html')  
+
 
 def login(request):
     if request.method== 'POST':
