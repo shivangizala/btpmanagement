@@ -12,6 +12,9 @@ from django.contrib import messages
 from django.contrib.auth.models import User, auth
 # Create your views here.
 
+def display(request):
+    return render(request,'display.html')  
+
 def myprojects(request):
     return render(request,'myprojects.html')  
 

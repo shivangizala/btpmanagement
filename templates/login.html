@@ -1,26 +1,60 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In</title>
+    <link rel="stylesheet" href="{%static 'CSS/Signin.css' %}" />
+
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap");
+    </style>
 </head>
+
 <body>
-    <form action="login" method="post">
-        {% csrf_token %}
-        <input type="text" name="username" placeholder="username"><br>
-        <input type="password" name="password" placeholder="password"><br>
-        <input type="Submit">
-    </form>
+     <!--Sign In Form-->
+     <div class="container">
+     <div class="form-popup " >
+        <form action="login" method="post" class="form-container">
+            {% csrf_token %}
+            <div class="login-close">
+                <b class="H1container">Sign In</b> 
+                    <span class="btn-close" onclick="closeForm()">X</span>
+            </div>
+            <div class="googlelogin">
+                <img class="google-logo-img" src="{%static 'Img/Google.png' %}" alt="Google Logo" />
+                <a href="#" class="google">
+                    Sign In with Google
+                </a>
+            </div>
+            <p class="or">Or</p>
 
+            <p for="email" class="FirstName"><b>Username</b></p>
+            <input type="text" placeholder="Enter Email" name="username" required>
 
-    <div>
-            {% for message in messages %}
-            <h3> {{message}}  </h3>
-            {% endfor %}
+            <p for="psw" class="FirstName"><b>Password</b></p>
+            <input type="password" placeholder="Enter Password" name="password" required>
+
+            <button  type="submit" class="btn">
+                <a class="btn" >Login</a>
+            </button>
+
+            <p class="New">New to This?</p>
+            <a class="New2" href="register">
+                Register
+            </a>
+            <div>
+                {% for message in messages %}
+                <h1> {{message}}  </h1>
+                {% endfor %}
+            </div>
+        </form>
+        
     </div>
+</div>
 </body>
+
 </html>

@@ -1,36 +1,74 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Registeration</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign UP</title>
+    <link rel="stylesheet" href="{%static 'CSS/Signup.css' %}" />
+
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap");
+    </style>
 </head>
+
 <body>
-    <form action="register" method="post">
-        {% csrf_token %}
+    <!--Sign Up Form-->
+    <div class="container">
+        <div class="form-Signup-popup">
+            <form action="register" method="post" class="form-container">
+                {% csrf_token %}
 
-        <input type="text" name="first_name" placeholder="First Name"><br>
-        <input type="text" name="last_name" placeholder="Last Name"><br>
-        <input type="text" name="username" placeholder="Username"><br>
-        <input type="email" name="email" placeholder="email"><br>
-        <input type="radio" id="student" name="is_student" value="student">
-        <label for="student">student</label>
-        <input type="radio" id="professor" name="is_student" value="professor">
-        <label for="css">professor</label><br>
-        <input type="password" name="password1" placeholder="Password"><br>
-        <input type="password" name="password2" placeholder="Confirm Password"><br>
-        <input type="Submit">
+                <div class="login-close">
+                    <b class="H1container">Sign Up</b>
+                    <span class="btn-close" onclick="closeSignupForm()">X</span>
+                </div>
+                <div class="Signup-googlelogin">
+                    <img class="google-logo-img" src="{%static 'Img/Google.png' %}" alt="Google Logo" />
+                    <a href="#" class="google">
+                        Sign Up with Google
+                    </a>
+                </div>
+                <p class="or">Or</p>
 
-    </form>
+                <p for="First Name" class="FirstName"><b>First Name:</b></p>
+                <input type="text" placeholder="Enter First Name" name="first_name" required>
 
-    <div>
-        {% for message in messages %}
-        <h3> {{message}}  </h3>
-        {% endfor %}
+                <p for="Last Name" class="FirstName"><b>Last Name:</b></p>
+                <input type="text" placeholder="Enter Last Name" name="last_name" required>
+
+                <p for="Last Name" class="FirstName"><b>User Name:</b></p>
+                <input type="text" placeholder="Enter User Name" name="username" required>
+
+                <p for="email" class="FirstName"><b>Email ID:</b></p>
+                <input type="text" placeholder="Enter Email" name="email" required>
+
+                <p class="FirstName"> <b>User Type:</b>
+                <input type="radio" id="Student" name="is_student" value="student" class="FirstName">
+                <label for="Student" class="FirstName">Student</label>
+                <input type="radio" id="Professor" name="is_student" value="professor" class="FirstName">
+                <label for="Professor" class="FirstName">Professor</label></p>
+
+                <p for="psw" class="FirstName"><b>Password:</b></p>
+                <input type="password" placeholder="Enter Password" name="password1" required>
+
+                <p for="psw" class="FirstName"><b>Confirm Password:</b></p>
+                <input type="password" placeholder="Enter Confirm Password" name="password2" required>
+
+                <button type="submit" class="Signup-btn">
+                    <a class="Signup-btn" >Sign Up</a>
+                </button>
+                <div>
+                    {% for message in messages %}
+                    <h1> {{message}}  </h1>
+                    {% endfor %}
+                </div>
+            </form>
+
+        </div>
     </div>
-
 </body>
+
 </html>
