@@ -18,11 +18,10 @@
      <!--Sign In Form-->
      <div class="container">
      <div class="form-popup " >
-        <form action="login" method="post" class="form-container">
+        <form name="myForm" action="login" method="post" class="form-container">
             {% csrf_token %}
             <div class="login-close">
                 <b class="H1container">Sign In</b> 
-                    <span class="btn-close" onclick="closeForm()">X</span>
             </div>
             <div class="googlelogin">
                 <img class="google-logo-img" src="{%static 'Img/Google.png' %}" alt="Google Logo" />
@@ -33,7 +32,7 @@
             <p class="or">Or</p>
 
             <p for="email" class="FirstName"><b>Username</b></p>
-            <input type="text" placeholder="Enter Email" name="username" required>
+            <input type="text" placeholder="Enter Username" name="username" required>
 
             <p for="psw" class="FirstName"><b>Password</b></p>
             <input type="password" placeholder="Enter Password" name="password" required>
@@ -48,7 +47,7 @@
             </a>
             <div>
                 {% for message in messages %}
-                <h1> {{message}}  </h1>
+                <h1 style="color:red; font-size:4rem"> {{message}}  </h1>
                 {% endfor %}
             </div>
         </form>

@@ -10,7 +10,6 @@ urlpatterns = [
     path("myprojects", views.myprojects, name="myprojects"),
     path("profile", views.profile, name="profile"),
     path("timetable", views.timetable, name="timetable"),
-    path("display", views.display, name="display"),
 
 ]
 

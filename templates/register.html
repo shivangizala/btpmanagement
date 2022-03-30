@@ -23,7 +23,6 @@
 
                 <div class="login-close">
                     <b class="H1container">Sign Up</b>
-                    <span class="btn-close" onclick="closeSignupForm()">X</span>
                 </div>
                 <div class="Signup-googlelogin">
                     <img class="google-logo-img" src="{%static 'Img/Google.png' %}" alt="Google Logo" />
@@ -62,7 +61,7 @@
                 </button>
                 <div>
                     {% for message in messages %}
-                    <h1> {{message}}  </h1>
+                    <h1 style="color:red; font-size:4rem"> {{message}}  </h1>
                     {% endfor %}
                 </div>
             </form>

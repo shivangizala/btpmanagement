@@ -10,10 +10,7 @@ def index(request):
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
-# Create your views here.
-
-def display(request):
-    return render(request,'display.html')  
+# Create your views here. 
 
 def myprojects(request):
     return render(request,'myprojects.html')  
@@ -36,7 +33,7 @@ def login(request):
             auth.login(request, user)
             return redirect("/")
         else:
-            messages.info(request,'invalid credentials')
+            messages.info(request,'Invalid Credentials')
             return redirect('login')
 
     else:
