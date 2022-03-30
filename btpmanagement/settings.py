@@ -26,9 +26,10 @@ SECRET_KEY = 'django-insecure-^$+_t-67rqx86-9+x4kft*o@+#463xd2-r1qwiq^pj*zkefd2_
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'btp-management.herokuapp.com']
+# ALLOWED_HOSTS = ['127.0.0.1', 'btp-management.herokuapp.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -78,26 +79,26 @@ WSGI_APPLICATION = 'btpmanagement.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'btpmanagement',
-#         'USER':'postgres',
-#         'PASSWORD':'1234',
-#         'HOST':'localhost'
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dcj7fp3ccjdhf6',
-        'USER':'ubirtxvfcbygwu',
-        'PASSWORD':'91f3d497f63b88b8394ebbbfbed8d6489544cafc9d18af500654c717b28fad3c',
-        'HOST':'ec2-18-214-134-226.compute-1.amazonaws.com',
-        'PORT':'5432'
+        'NAME': 'btpmanagement',
+        'USER':'postgres',
+        'PASSWORD':'1234',
+        'HOST':'localhost'
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'dcj7fp3ccjdhf6',
+#         'USER':'ubirtxvfcbygwu',
+#         'PASSWORD':'91f3d497f63b88b8394ebbbfbed8d6489544cafc9d18af500654c717b28fad3c',
+#         'HOST':'ec2-18-214-134-226.compute-1.amazonaws.com',
+#         'PORT':'5432'
+#     }
+# }
 
 
 # Password validation
@@ -139,7 +140,7 @@ USE_TZ = True
 # STATIC_ROOT=os.path.join(BASE_DIR,'assets')
 
 STATIC_URL = '/static/'
-# STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]
+STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]
 STATIC_ROOT=os.path.join(BASE_DIR,'staticfiles')
 
 # Default primary key field type
