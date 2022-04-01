@@ -30,21 +30,43 @@ def project(request, slug_text):
 
 def createProject(request):
     if request.method == 'POST':
-        print('ssssssssssssssssssssssssssssssssssssssssssssssssss')
         title = request.POST['title']
-        project = BtpProject(title=title)
+        username = request.POST['username']
+        # user1=User(username=username)
+        # slug = request.POST['slug']
+        publish_date = request.POST['publish_date']
+        content = request.POST['content']
+        status = request.POST['status']
+        total_applications = int(request.POST['total_applications'])
+        user1=User.objects.filter(username=username)
+
+        for u in user1:
+            author_id=u.id
+        project = BtpProject.objects.create(title=title, author_id=author_id, publish_date=publish_date, content=content, status=status, total_applications=total_applications )
         project.save()
-        print('user created')
+        # print('user created')
         return redirect('homepage')
     else:
         return render(request,'createProject.html')  
 
 def homepage(request):
-    all_projects=BtpProject.objects.filter(status='open')
-    context={
-        'projects':all_projects
-    }
-    return render(request,'homepage.html', context) 
+    if request.method == 'POST':
+        search_value = request.POST['search_value']
+        #serach value is username/author
+        user1=User.objects.filter(username=search_value)
+        for u in user1:
+            author_id=u.id     
+        all_projects=BtpProject.objects.filter(author_id=author_id, status='open')
+        context={
+            'projects':all_projects
+        }
+        return render(request,'homepage.html', context)
+    else:
+        all_projects=BtpProject.objects.filter(status='open')
+        context={
+            'projects':all_projects
+        }
+        return render(request,'homepage.html', context) 
 
 def myprojects(request):
     return render(request,'myprojects.html')  

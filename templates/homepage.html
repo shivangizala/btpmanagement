@@ -60,10 +60,20 @@
         </div>
       </nav>
       {% if user.is_authenticated %}
+
       <h1>hello, {{user.username}}</h1>
+
+      <h2>Open Projects: </h2>
+      <form action="homepage" method="post">
+        {% csrf_token %}
+      <input type="text" name="search_value" placeholder="search"><br>
+      <input type="Submit">
+      </form>
+
       {% for a in projects %}
       <a href="{% url 'project' a.slug %}"">{{a.title}}</a><br>
       {% endfor %}
+
       {% endif %}
 
       <!-- Optional JavaScript -->
