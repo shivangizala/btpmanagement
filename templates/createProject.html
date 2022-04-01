@@ -1,0 +1,32 @@
+{% if user.is_authenticated %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Registeration</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+</head>
+<body>
+    <form action="homepage" method="post">
+        {% csrf_token %}
+
+        <input type="title" name="title" placeholder="Title"><br>
+        <input type="username" name="title" placeholder="Title"><br>
+
+        <input type="Submit">
+    </form>
+
+    <div>
+        {% for message in messages %}
+        <h3> {{message}}  </h3>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
+{% else %}	
+<h1>Page not found.</h1>
+{% endif %}

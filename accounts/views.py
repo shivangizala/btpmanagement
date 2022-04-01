@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render
 # Create your views here.
 
 
@@ -10,7 +11,40 @@ def index(request):
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
+from .models import *
 # Create your views here. 
+
+def project(request, slug_text):
+    q=BtpProject.objects.filter(slug=slug_text)
+    all_projects=BtpProject.objects.all()
+    if q.exists():
+        q=q.first()
+    else:
+        return HttpResponse("<h1>page not found</h1>")
+    context={
+        'post':q,
+        'projects':all_projects
+
+    }
+    return render(request,'project.html', context)  
+
+def createProject(request):
+    if request.method == 'POST':
+        print('ssssssssssssssssssssssssssssssssssssssssssssssssss')
+        title = request.POST['title']
+        project = BtpProject(title=title)
+        project.save()
+        print('user created')
+        return redirect('homepage')
+    else:
+        return render(request,'createProject.html')  
+
+def homepage(request):
+    all_projects=BtpProject.objects.filter(status='open')
+    context={
+        'projects':all_projects
+    }
+    return render(request,'homepage.html', context) 
 
 def myprojects(request):
     return render(request,'myprojects.html')  
@@ -31,7 +65,7 @@ def login(request):
 
         if user is not None:
             auth.login(request, user)
-            return redirect("/")
+            return redirect("homepage")
         else:
             messages.info(request,'Invalid Credentials')
             return redirect('login')
