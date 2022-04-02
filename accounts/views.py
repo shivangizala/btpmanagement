@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
@@ -14,6 +15,7 @@ from django.contrib.auth.models import User, auth
 from .models import *
 # Create your views here. 
 
+@login_required(login_url='/')
 def project(request, slug_text):
     q=BtpProject.objects.filter(slug=slug_text)
     all_projects=BtpProject.objects.all()
@@ -28,6 +30,7 @@ def project(request, slug_text):
     }
     return render(request,'project.html', context)  
 
+@login_required(login_url='/')
 def createProject(request):
     if request.method == 'POST':
         title = request.POST['title']
@@ -49,6 +52,7 @@ def createProject(request):
     else:
         return render(request,'createProject.html')  
 
+@login_required(login_url='/')
 def homepage(request):
     if request.method == 'POST':
         search_value = request.POST['search_value']
@@ -68,12 +72,24 @@ def homepage(request):
         }
         return render(request,'homepage.html', context) 
 
+@login_required(login_url='/')
 def myprojects(request):
-    return render(request,'myprojects.html')  
+    username=request.user.username    
+    users=User.objects.filter(username=username)
+    for u in users:
+            author_id=u.id
+    all_projects=BtpProject.objects.filter(author_id=author_id)
+    context={
+        "all_projects":all_projects
+    }
 
+    return render(request,'myprojects.html',context)  
+
+@login_required(login_url='/')
 def profile(request):
     return render(request,'profile.html')  
 
+@login_required(login_url='/')
 def timetable(request):
     return render(request,'timetable.html')  
 
@@ -105,6 +121,7 @@ def register(request):
         password1 = request.POST['password1']
         password2 = request.POST['password2']
         email = request.POST['email']
+        
 
         if password1==password2:
             if User.objects.filter(username=username).exists():

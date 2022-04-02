@@ -1,3 +1,4 @@
+from sys import maxsize
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -9,24 +10,10 @@ from accounts.utils import unique_slug_generator
 # Create your models here.    
 
 class CollegePeople(models.Model):
-    userName = models.CharField(max_length=100, default="")
-    firstNAme = models.CharField(max_length=100, default="")
-    lastName = models.CharField(max_length=100, default="")
+    name = models.ForeignKey(User, on_delete=models.CASCADE, default="")
     course = models.CharField(max_length=100, default="")
-    cpi=models.IntegerField(default=0)
+    cpi=models.DecimalField(default=0, max_digits=3, decimal_places=1)
     is_student=models.BooleanField(default=True)
-
-class Student(models.Model):
-    userName = models.CharField(max_length=100, default="")
-    firstNAme = models.CharField(max_length=100, default="")
-    lastName = models.CharField(max_length=100, default="")
-    course = models.CharField(max_length=100, default="")
-    cpi=models.IntegerField(default=0)
-
-class Professor(models.Model):
-    userName = models.CharField(max_length=100, default="")
-    firstNAme = models.CharField(max_length=100, default="")
-    lastName = models.CharField(max_length=100, default="")
 
 class BtpProject(models.Model):
     options={
