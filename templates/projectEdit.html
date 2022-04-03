@@ -10,6 +10,7 @@
     <script src='main.js'></script>
 </head>
 <body>
+    <!-- vimp action="edit" -->
     <form action="edit" method="post">
         {% csrf_token %}
         <input type="text" value={{user.username}} name="username" placeholder="username" readonly><br>

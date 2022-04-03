@@ -7,6 +7,36 @@ from django.contrib import messages
 from django.contrib.auth.models import User, auth
 from .models import *
 from django.shortcuts import get_object_or_404
+# print("11111111111111111111")
+# print(u)
+# print("111111111111111111")
+
+@login_required(login_url='/')
+def profile(request):
+    if request.method == 'POST':
+        pass
+    else:
+        u=get_object_or_404(User, username=request.user.username)
+        q=get_object_or_404(CollegePeople, name_id=u.id)
+        context={
+            'u':u, #user object
+            'q':q #cp object
+        }
+        return render(request,'profile.html', context)
+
+@login_required(login_url='/')
+def profileEdit(request, username_text):
+    if request.method == 'POST':
+        pass
+    else:
+        pass
+
+# @login_required(login_url='/')
+# def profileDelete(request, username_text):
+#     if request.method == 'POST':
+#         pass
+#     else:
+#         pass
 
 @login_required(login_url='/')
 def project(request, slug_text):
@@ -108,13 +138,8 @@ def myprojects(request):
     return render(request,'myprojects.html',context)  
 
 @login_required(login_url='/')
-def profile(request):
-    return render(request,'profile.html')  
-
-@login_required(login_url='/')
 def timetable(request):
     return render(request,'timetable.html')  
-
 
 def login(request):
     if request.method== 'POST':

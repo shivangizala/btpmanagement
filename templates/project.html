@@ -1,5 +1,4 @@
 {% if user.is_authenticated %}
-<h1>
 projects/{{post.slug}}<br>
 title:{{post.title}}<br>
 content{{post.content}}<br>
@@ -7,7 +6,7 @@ author{{post.author}}<br>
 date:{{post.publish_date}}<br>
 status:{{post.status}}<br>
 total_applications:{{post.total_applications}}<br>
-</h1>
+<a href=""></a>
 {% else %}	
 <h1>Page not found.</h1>
 {% endif %}
