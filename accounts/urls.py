@@ -13,6 +13,9 @@ urlpatterns = [
     path("profile", views.profile, name="profile"),
     path("timetable", views.timetable, name="timetable"),
     path("project/<slug:slug_text>", views.project, name="project"),
+    path("project/<slug:slug_text>/edit", views.projectEdit, name="project-edit"),
+    path("project/<slug:slug_text>/delete", views.projectDelete, name="project-delete"),
+
 
 ]
 

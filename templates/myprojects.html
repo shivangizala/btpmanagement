@@ -1,12 +1,19 @@
-{% if user.is_authenticated %}
-<h1>All the projects of user:{{user.username}}</h1>
+{% if user.is_authenticated  %}
+    <h1>All the projects of user:{{user.username}}</h1>
+    <form action="myprojects" method="post">
+    {% csrf_token %}
+    <input type="text" name="search_value" placeholder="search"><br>
+    <input type="Submit">
+    </form>
     {% for a in all_projects%}
         {{a.title}}
         {{a.slug}}
         {{a.content}}
         {{a.author}}
         {{a.publish_date}}
-        <a href="{% url 'project' a.slug%}">edit link</a><br><br>
+        <a href="{% url 'project-edit' a.slug%}">edit </a>
+        <a href="{% url 'project-delete' a.slug%}">delete </a><br><br>
+
     {%endfor%}
 {% else %}	
     <h1>Page not found.</h1>

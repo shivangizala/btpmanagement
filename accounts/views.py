@@ -1,56 +1,76 @@
+from multiprocessing import context
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
-# Create your views here.
-
-
-def index(request):
-    return render(request, "index.html")
-
-#def register(request):
-    return render(request, "register.html")
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
 from .models import *
-# Create your views here. 
+from django.shortcuts import get_object_or_404
 
 @login_required(login_url='/')
 def project(request, slug_text):
-    q=BtpProject.objects.filter(slug=slug_text)
-    all_projects=BtpProject.objects.all()
-    if q.exists():
-        q=q.first()
+    if request.method == 'POST':
+        pass
     else:
-        return HttpResponse("<h1>page not found</h1>")
-    context={
-        'post':q,
-        'projects':all_projects
+        # q=BtpProject.objects.get(slug=slug_text)
+        q=get_object_or_404(BtpProject, slug=slug_text)
+        context={
+            'post':q,
+        }
+        return render(request,'project.html', context)  
 
-    }
-    return render(request,'project.html', context)  
+@login_required(login_url='/')
+def projectDelete(request, slug_text):
+    if request.method == 'POST':
+        pass
+    else:
+        q=get_object_or_404(BtpProject, slug=slug_text)
+        u=User.objects.get(username=request.user.username)
+        #see if its the creator of the project or not
+        if u.id==q.author_id:
+            q.delete()
+        return redirect(request, 'myprojects')
+
+@login_required(login_url='/')
+def projectEdit(request, slug_text):
+    if request.method == 'POST':
+        publish_date = request.POST['publish_date']
+        content = request.POST['content']
+        status = request.POST['status']
+        BtpProject.objects.filter(slug=slug_text).update(publish_date=publish_date, content=content, status=status )
+        return redirect( 'myprojects')
+    else:
+        #find project using slug in request
+        q=get_object_or_404(BtpProject, slug=slug_text)
+        u=get_object_or_404(User, username=request.user.username)  
+        context={
+            'post':q
+        }
+        if u.id==q.author_id:    
+            return render(request,'projectEdit.html', context)
+        else:
+            return HttpResponse("<h1>page not found</h1>")
 
 @login_required(login_url='/')
 def createProject(request):
     if request.method == 'POST':
         title = request.POST['title']
-        username = request.POST['username']
-        # user1=User(username=username)
-        # slug = request.POST['slug']
         publish_date = request.POST['publish_date']
         content = request.POST['content']
         status = request.POST['status']
-        total_applications = int(request.POST['total_applications'])
-        user1=User.objects.filter(username=username)
-
-        for u in user1:
-            author_id=u.id
-        project = BtpProject.objects.create(title=title, author_id=author_id, publish_date=publish_date, content=content, status=status, total_applications=total_applications )
+        u=get_object_or_404(User, username=request.user.username)  
+        project = BtpProject.objects.create(title=title, author_id=u.id, publish_date=publish_date, content=content, status=status )
         project.save()
-        # print('user created')
         return redirect('homepage')
     else:
-        return render(request,'createProject.html')  
+        #whole below process to check if the user is is_Student or not
+        u=get_object_or_404(User, username=request.user.username)  
+        q=get_object_or_404(CollegePeople, name_id=u.id)
+        if q.is_student==False:
+            return render(request,'createProject.html')
+        else:
+            return HttpResponse("<h1>page not found</h1>")
 
 @login_required(login_url='/')
 def homepage(request):
@@ -66,19 +86,21 @@ def homepage(request):
         }
         return render(request,'homepage.html', context)
     else:
+        #whole below process to check if the user is is_Student or not
+        u=get_object_or_404(User, username=request.user.username)
+        q=get_object_or_404(CollegePeople, name_id=u.id)
         all_projects=BtpProject.objects.filter(status='open')
+        is_student=q.is_student
         context={
-            'projects':all_projects
+            'projects':all_projects,
+            'is_student': is_student         
         }
         return render(request,'homepage.html', context) 
 
 @login_required(login_url='/')
 def myprojects(request):
-    username=request.user.username    
-    users=User.objects.filter(username=username)
-    for u in users:
-            author_id=u.id
-    all_projects=BtpProject.objects.filter(author_id=author_id)
+    u=get_object_or_404(User, username=request.user.username)
+    all_projects=BtpProject.objects.filter(author_id=u.id)
     context={
         "all_projects":all_projects
     }
@@ -147,3 +169,6 @@ def register(request):
 def logout(request):
     auth.logout(request)
     return redirect('/')      
+
+def index(request):
+    return render(request, "index.html")

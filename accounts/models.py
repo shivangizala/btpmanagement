@@ -22,6 +22,7 @@ class BtpProject(models.Model):
     }
     title = models.CharField(max_length=100, default="")
     slug = models.SlugField(max_length=100, null=True, blank=True)
+    # , input_formats=['%Y-%m-%d', ] do this formatting in forms
     publish_date = models.DateField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, default="")
     content=models.TextField(default="", blank=True)
