@@ -15,6 +15,11 @@ class CollegePeople(models.Model):
     cpi=models.DecimalField(default=0, max_digits=3, decimal_places=1)
     is_student=models.BooleanField(default=True)
 
+class Notification(models.Model):
+    name= models.ForeignKey(User, on_delete=models.CASCADE, default="")
+    moment = models.DateTimeField(default=timezone.now)
+    content=models.CharField(max_length=100, default="")
+
 class BtpProject(models.Model):
     options={
         ('open','Open'),
@@ -30,6 +35,16 @@ class BtpProject(models.Model):
     total_applications=models.IntegerField(default=0)
     def __str__(self):
        return self.title
+
+class ProjectMember(models.Model):
+    options={
+        ('accepted','accepted'),
+        ('rejected','rejected'),
+        ('unknown','unknown')#when applied but not accepted or rejected yet. unconfirmed.
+    }
+    project=models.ManyToManyField(BtpProject)
+    name=models.ForeignKey(User, on_delete=models.CASCADE, default="")
+    accept_status=models.CharField(max_length=100, choices=options, default='rejected')
 
 def slug_generator(sender, instance, *args, **kwargs):
     if not instance.slug:

@@ -1,2 +1,5 @@
+{% load static %}
 {{u.username}}
 {{q.cpi}}
+{{u.email}}
+<a href="{% url  'profile-edit' u.id %}">edit</a>

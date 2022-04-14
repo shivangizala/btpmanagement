@@ -1,12 +1,19 @@
 {% if user.is_authenticated %}
-projects/{{post.slug}}<br>
-title:{{post.title}}<br>
-content{{post.content}}<br>
-author{{post.author}}<br>
-date:{{post.publish_date}}<br>
-status:{{post.status}}<br>
-total_applications:{{post.total_applications}}<br>
-<a href=""></a>
+    projects/{{post.slug}}<br>
+    title:{{post.title}}<br>
+    content{{post.content}}<br>
+    author{{post.author}}<br>
+    date:{{post.publish_date}}<br>
+    status:{{post.status}}<br>
+    total_applications:{{post.total_applications}}<br>
+    {%if is_student%}
+    <form action="" method="post">    
+        {% csrf_token %}
+        <input type="hidden" name="username" placeholder="username" value="apply"><br>
+        <button type="Submit">Apply</button>
+    </form>
+    {%endif%}
+
 {% else %}	
-<h1>Page not found.</h1>
+    <h1>Page not found.</h1>
 {% endif %}

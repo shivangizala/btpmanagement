@@ -1,10 +1,14 @@
 {% if user.is_authenticated  %}
+<!-- {{all_projects.all.count}} -->
     <h1>All the projects of user:{{user.username}}</h1>
     <form action="myprojects" method="post">
     {% csrf_token %}
-    <input type="text" name="search_value" placeholder="search"><br>
+    <input type="text" name="search_value" placeholder="search" value="search"><br>
     <input type="Submit">
     </form>
+
+    <button><a  href="requests">pending requests</a></button>
+
     {% for a in all_projects%}
         {{a.title}}
         {{a.slug}}
@@ -13,7 +17,6 @@
         {{a.publish_date}}
         <a href="{% url 'project-edit' a.slug%}">edit </a>
         <a href="{% url 'project-delete' a.slug%}">delete </a><br><br>
-
     {%endfor%}
 {% else %}	
     <h1>Page not found.</h1>

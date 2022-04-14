@@ -7,9 +7,24 @@ from django.contrib import messages
 from django.contrib.auth.models import User, auth
 from .models import *
 from django.shortcuts import get_object_or_404
+# from django.core.mail import send_mail
 # print("11111111111111111111")
 # print(u)
 # print("111111111111111111")
+
+# @login_required(login_url='/')
+# def projectApply(request, slug_text):
+#     if request.method == 'POST':
+#         return redirect( 'project/slug_text')
+#     else:
+        # return render(request,'project.html', context)  
+
+@login_required(login_url='/')
+def requests(request):
+    if request.method == 'POST':
+        pass
+    else:
+        return render(request,'requests.html', context)  
 
 @login_required(login_url='/')
 def profile(request):
@@ -25,28 +40,42 @@ def profile(request):
         return render(request,'profile.html', context)
 
 @login_required(login_url='/')
-def profileEdit(request, username_text):
+def profileEdit(request, profile_id):
     if request.method == 'POST':
-        pass
+        u=get_object_or_404(User, username=request.user.username)
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        cpi = request.POST['cpi']
+        course = request.POST['course']
+        User.objects.filter(id=u.id).update(first_name=first_name, last_name=last_name)
+        CollegePeople.objects.filter(name_id=profile_id).update(cpi=cpi, course=course)
+        return redirect( 'profile')
     else:
-        pass
-
-# @login_required(login_url='/')
-# def profileDelete(request, username_text):
-#     if request.method == 'POST':
-#         pass
-#     else:
-#         pass
+        u=get_object_or_404(User, username=request.user.username)
+        q=get_object_or_404(CollegePeople, name_id=u.id)
+        context={
+            'u':u, #user object
+            'q':q #cp object
+        }
+        if u.id==profile_id:
+            return render(request,'profileEdit.html', context)
+        else:
+            return HttpResponse("<h1>page not found</h1>")
 
 @login_required(login_url='/')
 def project(request, slug_text):
     if request.method == 'POST':
-        pass
+        u=get_object_or_404(User, username=request.user.username)
+
     else:
         # q=BtpProject.objects.get(slug=slug_text)
+        u=get_object_or_404(User, username=request.user.username)
+        c=get_object_or_404(CollegePeople, name_id=u.id)
+        is_student=c.is_student
         q=get_object_or_404(BtpProject, slug=slug_text)
         context={
             'post':q,
+            'is_student':is_student
         }
         return render(request,'project.html', context)  
 
@@ -60,7 +89,7 @@ def projectDelete(request, slug_text):
         #see if its the creator of the project or not
         if u.id==q.author_id:
             q.delete()
-        return redirect(request, 'myprojects')
+        return redirect(request, 'homepage')
 
 @login_required(login_url='/')
 def projectEdit(request, slug_text):
@@ -134,13 +163,21 @@ def myprojects(request):
     context={
         "all_projects":all_projects
     }
-
     return render(request,'myprojects.html',context)  
 
 @login_required(login_url='/')
 def timetable(request):
     return render(request,'timetable.html')  
 
+@login_required(login_url='/')
+def notification(request):
+    u=get_object_or_404(User, username=request.user.username)
+    q=Notification.objects.filter(name_id=u.id).order_by('-moment')
+    context={
+        'q':q
+    }
+    return render(request,'notification.html',context)  
+    
 def login(request):
     if request.method== 'POST':
         username = request.POST['username']
@@ -150,6 +187,16 @@ def login(request):
 
         if user is not None:
             auth.login(request, user)
+        #     send_mail(
+        #         'hello there, login is successful',
+        #         'this is automated',
+        #         'shivuhaters@gmail.com',
+        #         [user.email],
+        #         fail_silently=False
+        #     )
+            u=get_object_or_404(User, username=request.user.username)  
+            n = Notification.objects.create(name_id=u.id, content="Login attempted")
+            n.save()
             return redirect("homepage")
         else:
             messages.info(request,'Invalid Credentials')
@@ -179,7 +226,14 @@ def register(request):
                 return redirect('register')
             else:   
                 user = User.objects.create_user(username=username, password=password1, email=email,first_name=first_name,last_name=last_name)
-                user.save();
+                user.save()
+                if is_student=='student':
+                    is_student=True
+                else:
+                    is_student=False
+
+                collegePerson=CollegePeople.objects.create(name_id=user.id, is_student=is_student)
+                collegePerson.save()
                 print('user created')
                 return redirect('login')
 

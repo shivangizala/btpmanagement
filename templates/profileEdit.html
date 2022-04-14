@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="edit" method="post">    
+        {% csrf_token %}
+        <input type="text" value={{user.username}} name="username" placeholder="username" readonly><br>
+        <input type="text" value="{{u.first_name}}" name="first_name" placeholder="first_name" ><br>
+        <input type="text" value="{{u.last_name}}" name="last_name" placeholder="last_name" ><br>
+        <input type="text" value="{{q.cpi}}" name="cpi" placeholder="cpi" ><br>
+        <input type="text" value="{{q.course}}" name="course" placeholder="course" ><br>
+        <input type="Submit">
+    </form>
+
+    <div>
+        {% for message in messages %}
+        <h3> {{message}}  </h3>
+        {% endfor %}
+    </div>
+</body>
+</html>
