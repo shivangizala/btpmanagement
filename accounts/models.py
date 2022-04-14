@@ -40,7 +40,7 @@ class ProjectMember(models.Model):
     options={
         ('accepted','accepted'),
         ('rejected','rejected'),
-        ('unknown','unknown')#when applied but not accepted or rejected yet. unconfirmed.
+        ('requested','requested')#when applied but not accepted or rejected yet. unconfirmed.
     }
     project=models.ManyToManyField(BtpProject)
     name=models.ForeignKey(User, on_delete=models.CASCADE, default="")

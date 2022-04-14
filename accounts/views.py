@@ -64,19 +64,51 @@ def profileEdit(request, profile_id):
 
 @login_required(login_url='/')
 def project(request, slug_text):
+    #0-rejected 1-accepted 2-requested
     if request.method == 'POST':
         u=get_object_or_404(User, username=request.user.username)
-
+        q=get_object_or_404(BtpProject, slug=slug_text)
+        status_value=request.POST['accept_status']
+        if status_value=='apply':#means that user is either rejected or requested status
+            set_status='requested'
+            pm = ProjectMember.objects.create(name_id=u.id, accept_status=set_status)
+            pm.save()
+            pm.project.add(q)
+            pm.save()
+        else: # status_value=='withdraw':
+            set_status='rejected'
+            pm = ProjectMember.objects.filter(name_id=u.id, BtpProject__id=q.id)
+            pm=pm.first()
+            pm.delete()
+        return redirect('myprojects')
     else:
-        # q=BtpProject.objects.get(slug=slug_text)
         u=get_object_or_404(User, username=request.user.username)
         c=get_object_or_404(CollegePeople, name_id=u.id)
         is_student=c.is_student
         q=get_object_or_404(BtpProject, slug=slug_text)
+        pm = ProjectMember.objects.filter(name_id=u.id, project__id=q.id)
+        
+        if pm.exists():
+            pm=pm.first()
+            set_status=1 #'accepted' #bound to change
+            # print(pm.accept_status)
+            set_status=pm.accept_status
+            if set_status=='accepted':
+                set_status=1
+            elif set_status=='rejected':
+                set_status=0
+            else :
+                set_status=2
+        else:
+            set_status=0#'rejected'
+
         context={
+            'setted_status':set_status,
             'post':q,
-            'is_student':is_student
+            'is_student':is_student,
         }
+        print(set_status)
+        print("3333333333333333")
         return render(request,'project.html', context)  
 
 @login_required(login_url='/')

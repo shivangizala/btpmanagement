@@ -7,11 +7,21 @@
     status:{{post.status}}<br>
     total_applications:{{post.total_applications}}<br>
     {%if is_student%}
-    <form action="" method="post">    
-        {% csrf_token %}
-        <input type="hidden" name="username" placeholder="username" value="apply"><br>
-        <button type="Submit">Apply</button>
-    </form>
+        {% if setted_status == 0 %}
+            <form action="" method="post">    
+                {% csrf_token %}
+                <input type="hidden" name="accept_status" placeholder="accept_status" value="apply"><br>
+                <button type="Submit">Apply</button>
+            </form>
+        {% elif setted_status == 1 %}
+            <form action="" method="post">    
+                {% csrf_token %}
+                <input type="hidden" name="accept_status" placeholder="accept_status" value="withdraw"><br>
+                <button type="Submit">withdraw</button>
+            </form>
+        {% else %}
+            <h3>request pending</h3>
+        {%endif%}
     {%endif%}
 
 {% else %}	
