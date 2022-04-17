@@ -1,5 +1,10 @@
 {% load static %}
 {{u.username}}
+{{u.first_name}}
+{{u.last_name}}
 {{q.cpi}}
+{{q.course}}
 {{u.email}}
-<a href="{% url  'profile-edit' u.id %}">edit</a>
+{%if same_user%}
+    <a href="{% url  'profile-edit' u.id %}">edit</a>
+{%endif%}

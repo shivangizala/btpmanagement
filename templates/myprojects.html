@@ -7,15 +7,16 @@
     <input type="Submit">
     </form>
 
-    <button><a  href="requests">pending requests</a></button>
+    <!-- <button><a  href="requests">pending requests</a></button> -->
 
     {% for a in all_projects%}
         {{a.title}}
         {{a.slug}}
         {{a.content}}
         {{a.author}}
-        {{a.publish_date}}
-        <a href="{% url 'project-edit' a.slug%}">edit </a>
+        {{a.publish_date}}<br>
+        <a href="{% url 'project' a.slug%}">view more </a><br>
+        <a href="{% url 'project-edit' a.slug%}">edit </a><br>
         <a href="{% url 'project-delete' a.slug%}">delete </a><br><br>
     {%endfor%}
 {% else %}	

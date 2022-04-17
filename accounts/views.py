@@ -20,22 +20,82 @@ from django.shortcuts import get_object_or_404
         # return render(request,'project.html', context)  
 
 @login_required(login_url='/')
-def requests(request):
+def projectMom(request, slug_text):
     if request.method == 'POST':
         pass
     else:
-        return render(request,'requests.html', context)  
+        return render(request,'projectMom.html')  
 
 @login_required(login_url='/')
-def profile(request):
+def projectRequestsAccept(request, slug_text, profile_id):
+    q=get_object_or_404(BtpProject, slug=slug_text)
+    if request.method == 'POST':
+        value = request.POST['value']
+        if value=='accept':
+            pm = ProjectMember.objects.filter( project__id=q.id,name_id=profile_id)
+            pm=pm.first()
+            pm.accept_status='accepted'
+            pm.save()
+        # else: #value=decline
+        #     pm = ProjectMember.objects.filter( project__id=q.id,name_id=profile_id)
+        #     pm=pm.first()
+        #     pm.delete()
+        url='/project/'+slug_text+'/requests' #vvvvvvvvvvvvimp
+        return redirect( url)
+    else:
+        return HttpResponse("<h1>page not found</h1>")
+
+@login_required(login_url='/')
+def projectRequestsDecline(request, slug_text, profile_id):
+    q=get_object_or_404(BtpProject, slug=slug_text)
+    if request.method == 'POST':
+        value = request.POST['value']
+        if value=='decline':
+            pm = ProjectMember.objects.filter( project__id=q.id,name_id=profile_id)
+            pm=pm.first()
+            pm.delete()
+        url='/project/'+slug_text+'/requests' #vvvvvvvvvvvvimp
+        return redirect(url)
+    else:
+        return HttpResponse("<h1>page not found</h1>")
+
+@login_required(login_url='/')
+def projectRequests(request, slug_text):
     if request.method == 'POST':
         pass
     else:
         u=get_object_or_404(User, username=request.user.username)
+        q=get_object_or_404(BtpProject, slug=slug_text)
+        pm = ProjectMember.objects.filter( project__id=q.id, accept_status='requested')
+        all_requests=pm
+        context={
+            'all_requests':all_requests,
+            'title':q.title,
+            'slug':slug_text,
+        }
+        #check if its the same user
+        if u.id==q.author_id:    
+            return render(request,'projectRequests.html', context)  
+        else:
+            return HttpResponse("<h1>page not found</h1>")
+        
+
+@login_required(login_url='/')
+def profile(request, profile_id):
+    if request.method == 'POST':
+        pass
+    else:
+        u=get_object_or_404(User, id=profile_id)
+        u2=get_object_or_404(User, username=request.user.username)
         q=get_object_or_404(CollegePeople, name_id=u.id)
+        if u2.id==profile_id:
+            same_user=True
+        else:
+            same_user=False
         context={
             'u':u, #user object
-            'q':q #cp object
+            'q':q, #cp object
+            'same_user':same_user
         }
         return render(request,'profile.html', context)
 
@@ -84,13 +144,19 @@ def project(request, slug_text):
     else:
         u=get_object_or_404(User, username=request.user.username)
         c=get_object_or_404(CollegePeople, name_id=u.id)
-        is_student=c.is_student
         q=get_object_or_404(BtpProject, slug=slug_text)
+        team = ProjectMember.objects.filter( project__id=q.id, accept_status='accepted')
+        #check if its the same user
+        if u.id==q.author_id:    
+            same_user=True
+        else:
+            same_user=False
+        is_student=c.is_student
         pm = ProjectMember.objects.filter(name_id=u.id, project__id=q.id)
         
         if pm.exists():
             pm=pm.first()
-            set_status=1 #'accepted' #bound to change
+            #'accepted' #bound to change
             # print(pm.accept_status)
             set_status=pm.accept_status
             if set_status=='accepted':
@@ -106,9 +172,9 @@ def project(request, slug_text):
             'setted_status':set_status,
             'post':q,
             'is_student':is_student,
+            'same_user':same_user,
+            'team':team
         }
-        print(set_status)
-        print("3333333333333333")
         return render(request,'project.html', context)  
 
 @login_required(login_url='/')
@@ -184,16 +250,19 @@ def homepage(request):
         is_student=q.is_student
         context={
             'projects':all_projects,
-            'is_student': is_student         
+            'is_student': is_student,
+            'id':u.id,          
         }
         return render(request,'homepage.html', context) 
 
 @login_required(login_url='/')
 def myprojects(request):
     u=get_object_or_404(User, username=request.user.username)
+    c=get_object_or_404(CollegePeople, name_id=u.id)
     all_projects=BtpProject.objects.filter(author_id=u.id)
     context={
-        "all_projects":all_projects
+        "all_projects":all_projects,
+        'is_student':is_student,
     }
     return render(request,'myprojects.html',context)  
 

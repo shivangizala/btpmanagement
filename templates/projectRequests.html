@@ -1,0 +1,17 @@
+{% for each_request in all_requests%}
+        {{each_request.name.email}}<br>
+        {{each_request.name.username}}<br>
+        {{title}}<br>
+        <a href="{% url 'profile' each_request.name.id %}">Profile Link</a>
+        {{each_request.name.email}}
+        <form action="{% url 'project-accept' slug each_request.name.id%}" method="post">    
+                {% csrf_token %}
+                <input type="hidden" name="value" placeholder="accept" value="accept"><br>
+                <button type="Submit">Accept</button>
+        </form>
+        <form action="{% url 'project-decline' slug each_request.name.id%}" method="post">    
+                {% csrf_token %}
+                <input type="hidden" name="value" placeholder="decline" value="decline"><br>
+                <button type="Submit">Decline</button>
+        </form>
+{%endfor%}

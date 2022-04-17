@@ -6,22 +6,32 @@
     date:{{post.publish_date}}<br>
     status:{{post.status}}<br>
     total_applications:{{post.total_applications}}<br>
+    team members:<br>
+    {% for a in team%}
+        {{a.name.email}}<br>
+    {%endfor%}
+    <!-- buttons for student -->
     {%if is_student%}
-        {% if setted_status == 0 %}
+        {% if setted_status == 0 %}     <!-- rejected -->
             <form action="" method="post">    
                 {% csrf_token %}
                 <input type="hidden" name="accept_status" placeholder="accept_status" value="apply"><br>
                 <button type="Submit">Apply</button>
             </form>
-        {% elif setted_status == 1 %}
+        {% elif setted_status == 1 %} <!-- accepted -->
+            <h3>you are accepted here</h3> 
+        {% else %}                      <!-- requested -->
             <form action="" method="post">    
                 {% csrf_token %}
                 <input type="hidden" name="accept_status" placeholder="accept_status" value="withdraw"><br>
                 <button type="Submit">withdraw</button>
             </form>
-        {% else %}
-            <h3>request pending</h3>
         {%endif%}
+    {%endif%}
+
+    {%if same_user%}
+            <a href="{% url 'project-requests' post.slug%}">Pending requests</a><br>
+            <a href="{% url 'project-mom' post.slug%}">Project progress</a><br>
     {%endif%}
 
 {% else %}	
