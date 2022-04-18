@@ -22,9 +22,85 @@ from django.shortcuts import get_object_or_404
 @login_required(login_url='/')
 def projectMom(request, slug_text):
     if request.method == 'POST':
+        pass        
+    else:
+        #check if requesting person is in team
+        u=get_object_or_404(User, username=request.user.username)
+        c=get_object_or_404(CollegePeople, name_id=u.id)
+        q=get_object_or_404(BtpProject, slug=slug_text)
+        team_prof=False
+        in_team= False
+        if c.is_student==False: 
+            if c.name_id==u.id: #prof who created
+                team_prof=True
+            else:
+                team_prof=False
+        else:
+            pm = ProjectMember.objects.filter(name_id=u.id, project__id=q.id, accept_status="accepted")
+            if pm.exists():
+                pm=pm.first()
+                in_team=True
+            else:
+                in_team=False
+                return HttpResponse("<h1>page not found</h1>")
+        all_mom = Mom.objects.filter( project__id=q.id)
+        context={
+            'team_prof':team_prof,
+            'in_team':in_team,
+            'all_mom':all_mom,
+            'title':q.title,
+            'slug':q.slug
+        }
+        return render(request,'projectMom.html', context)  
+
+@login_required(login_url='/')
+def projectMomEdit(request, slug_text, mom_id):
+    if request.method == 'POST':
+        q=get_object_or_404(Mom, id=mom_id) 
+        agenda = request.POST['agenda']
+        date = request.POST['date']
+        points = request.POST['points']
+        description = request.POST['description']
+        minutes = request.POST['minutes']
+        Mom.objects.filter(id=mom_id).update(agenda=agenda, date=date, points=int(points), description=description, minutes=int(minutes))
+        url="/project/"+slug_text+ "/mom"
+        return redirect(url)
+    else:
+        q=get_object_or_404(Mom, id=mom_id) 
+        context={
+            'slug_text':slug_text,
+            'q':q
+        }
+        return render(request,'projectMomEdit.html', context)   
+
+@login_required(login_url='/')
+def projectMomCreate(request, slug_text):
+    if request.method == 'POST':
+        agenda = request.POST['agenda']
+        date = request.POST['date']
+        points = request.POST['points']
+        description = request.POST['description']
+        minutes = request.POST['minutes']
+        q=get_object_or_404(BtpProject, slug=slug_text) 
+        mom = Mom.objects.create(agenda=agenda, date=date, points=int(points), description=description, minutes=int(minutes), project_id=q.id )
+        mom.save()
+        url="/project/"+slug_text+ "/mom"
+        return redirect(url)
+    else:
+        context={
+            'slug_text':slug_text,
+        }
+        return render(request,'projectMomCreate.html', context)   
+
+@login_required(login_url='/')
+def projectMomDelete(request, slug_text, mom_id):
+    if request.method == 'POST':
         pass
     else:
-        return render(request,'projectMom.html')  
+        q=get_object_or_404(Mom, id=mom_id) 
+        q.delete()
+        url="/project/"+slug_text+ "/mom"
+        return redirect(url) 
 
 @login_required(login_url='/')
 def projectRequestsAccept(request, slug_text, profile_id):
@@ -79,7 +155,6 @@ def projectRequests(request, slug_text):
         else:
             return HttpResponse("<h1>page not found</h1>")
         
-
 @login_required(login_url='/')
 def profile(request, profile_id):
     if request.method == 'POST':
@@ -137,10 +212,11 @@ def project(request, slug_text):
             pm.save()
         else: # status_value=='withdraw':
             set_status='rejected'
-            pm = ProjectMember.objects.filter(name_id=u.id, BtpProject__id=q.id)
+            pm = ProjectMember.objects.filter(name_id=u.id, project__id=q.id)
             pm=pm.first()
             pm.delete()
-        return redirect('myprojects')
+        url='/myprojects/' + str(u.id)
+        return redirect(url)
     else:
         u=get_object_or_404(User, username=request.user.username)
         c=get_object_or_404(CollegePeople, name_id=u.id)
@@ -156,8 +232,6 @@ def project(request, slug_text):
         
         if pm.exists():
             pm=pm.first()
-            #'accepted' #bound to change
-            # print(pm.accept_status)
             set_status=pm.accept_status
             if set_status=='accepted':
                 set_status=1
@@ -168,12 +242,21 @@ def project(request, slug_text):
         else:
             set_status=0#'rejected'
 
+        #check if student is in team
+        pm = ProjectMember.objects.filter(name_id=u.id, project__id=q.id, accept_status="accepted")
+        if pm.exists():
+            pm=pm.first()
+            in_team=True
+        else:
+            in_team=False
+
         context={
             'setted_status':set_status,
             'post':q,
             'is_student':is_student,
             'same_user':same_user,
-            'team':team
+            'team':team,
+            'in_team':in_team
         }
         return render(request,'project.html', context)  
 
@@ -195,7 +278,9 @@ def projectEdit(request, slug_text):
         publish_date = request.POST['publish_date']
         content = request.POST['content']
         status = request.POST['status']
-        BtpProject.objects.filter(slug=slug_text).update(publish_date=publish_date, content=content, status=status )
+        grade = request.POST['grade']
+        grade=int(grade)
+        BtpProject.objects.filter(slug=slug_text).update(publish_date=publish_date, content=content, status=status , grade=grade)
         return redirect( 'myprojects')
     else:
         #find project using slug in request
@@ -256,13 +341,22 @@ def homepage(request):
         return render(request,'homepage.html', context) 
 
 @login_required(login_url='/')
-def myprojects(request):
-    u=get_object_or_404(User, username=request.user.username)
+def myprojects(request, profile_id): #id of person who created it
+    u=get_object_or_404(User, username=request.user.username)#person who is trying to access
     c=get_object_or_404(CollegePeople, name_id=u.id)
-    all_projects=BtpProject.objects.filter(author_id=u.id)
+    is_student=c.is_student
+    if c.is_student==False:
+        all_projects=BtpProject.objects.filter(author_id=u.id)
+    else:
+        all_projects = ProjectMember.objects.filter( name_id=u.id)
+    if u.id==profile_id:    
+        same_user=True
+    else:
+        same_user=False
     context={
         "all_projects":all_projects,
         'is_student':is_student,
+        'same_user': same_user
     }
     return render(request,'myprojects.html',context)  
 

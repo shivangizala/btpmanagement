@@ -8,17 +8,28 @@
     </form>
 
     <!-- <button><a  href="requests">pending requests</a></button> -->
-
-    {% for a in all_projects%}
-        {{a.title}}
-        {{a.slug}}
-        {{a.content}}
-        {{a.author}}
-        {{a.publish_date}}<br>
-        <a href="{% url 'project' a.slug%}">view more </a><br>
-        <a href="{% url 'project-edit' a.slug%}">edit </a><br>
-        <a href="{% url 'project-delete' a.slug%}">delete </a><br><br>
-    {%endfor%}
+    {%if not is_student%}
+        {% for a in all_projects%}
+            {{a.title}}
+            {{a.slug}}
+            {{a.content}}
+            {{a.author}}
+            {{a.publish_date}}<br>
+            <a href="{% url 'project' a.slug%}">view more </a><br>
+            {%if same_user%}
+            <a href="{% url 'project-edit' a.slug%}">edit </a><br>
+            <a href="{% url 'project-delete' a.slug%}">delete </a><br><br>
+            {%endif%}
+        {%endfor%}
+    {%else%}
+        {% for a in all_projects%}
+            {% for b in a.project.all%}
+                {{b.title}}<br>
+                {{a.accept_status}}<br>
+                <a href="{% url 'project' b.slug %}">view more </a><br>
+            {%endfor%}
+        {%endfor%}
+    {%endif%}
 {% else %}	
     <h1>Page not found.</h1>
 {% endif %}

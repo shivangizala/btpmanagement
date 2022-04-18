@@ -1,5 +1,6 @@
 {% for each_request in all_requests%}
-        {{each_request.name.email}}<br>
+<!-- #vvvvimp -->
+        {{each_request.name.email}}<br> 
         {{each_request.name.username}}<br>
         {{title}}<br>
         <a href="{% url 'profile' each_request.name.id %}">Profile Link</a>

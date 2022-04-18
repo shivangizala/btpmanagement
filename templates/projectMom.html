@@ -1,1 +1,16 @@
-<h1>project mom</h1>
+{%if  team_prof or in_team%}
+    <h1>project mom</h1>
+    {{title}}
+    {% for a in all_mom%}
+        {{a.date}}
+        {{a.agenda}}
+        {{a.description}}
+        {%if  team_prof%}
+        <a href="{% url 'project-mom-edit' slug a.id%}">edit </a><br>
+        <a href="{% url 'project-mom-delete' slug a.id%}">delete </a><br><br>
+        {%else%}
+        {%endif%}
+    {%endfor%}
+{%else%}
+    <h1>Page not found.</h1>
+{%endif%}

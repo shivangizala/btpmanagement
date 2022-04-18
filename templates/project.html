@@ -5,6 +5,7 @@
     author{{post.author}}<br>
     date:{{post.publish_date}}<br>
     status:{{post.status}}<br>
+    grade:{{post.grade}}<br>
     total_applications:{{post.total_applications}}<br>
     team members:<br>
     {% for a in team%}
@@ -29,8 +30,11 @@
         {%endif%}
     {%endif%}
 
-    {%if same_user%}
+    {%if same_user %}
             <a href="{% url 'project-requests' post.slug%}">Pending requests</a><br>
+            <a href="{% url 'project-mom' post.slug%}">Project progress</a><br>
+    {%endif%}
+    {%if in_team %}
             <a href="{% url 'project-mom' post.slug%}">Project progress</a><br>
     {%endif%}
 

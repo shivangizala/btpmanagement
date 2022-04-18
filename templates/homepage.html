@@ -32,7 +32,7 @@
               <a class="nav-link" href="{% url 'profile' id %}">Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="myprojects">My Projects</a>
+              <a class="nav-link" href="{% url 'myprojects' id %}">My Projects</a>
             </li>
             {% if not is_student %}
             <li class="nav-item">

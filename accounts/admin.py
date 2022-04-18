@@ -13,7 +13,11 @@ class NotificationAdmin(admin.ModelAdmin):
 class ProjectMemberAdmin(admin.ModelAdmin):
     list_display=('name','accept_status')
 
+class MomAdmin(admin.ModelAdmin):
+    list_display=('project','description')
+
 admin.site.register(BtpProject, BtpProjectAdmin)
 admin.site.register(CollegePeople, CollegePeopleAdmin)
 admin.site.register(Notification, NotificationAdmin)
 admin.site.register(ProjectMember, ProjectMemberAdmin)
+admin.site.register(Mom, MomAdmin)

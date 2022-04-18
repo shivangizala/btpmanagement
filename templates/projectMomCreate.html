@@ -1,0 +1,33 @@
+{% if user.is_authenticated%}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Registeration</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+</head>
+<body>
+    <form action="{% url 'project-mom-create' slug_text%}" method="post">
+        {% csrf_token %}
+        <input type="text"  name="agenda" placeholder="agenda" value="q."><br>
+        <input type="text" name="title" placeholder="description"><br>
+        <input type="date" id="date" name="date"><br>
+        <input type="number" name="minutes" placeholder="minutes of meeting"><br>        
+        <input type="number" name="points" placeholder="grades"><br>      
+        <input type="Submit">
+    </form>
+
+    <div>
+        {% for message in messages %}
+        <h3> {{message}}  </h3>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
+{% else %}	
+<h1>Page not found.</h1>
+{% endif %}

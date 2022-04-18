@@ -33,6 +33,7 @@ class BtpProject(models.Model):
     content=models.TextField(default="", blank=True)
     status = models.CharField(max_length=100, choices=options, default='open')
     total_applications=models.IntegerField(default=0)
+    grade=models.IntegerField(default=0)
     def __str__(self):
        return self.title
 
@@ -45,6 +46,15 @@ class ProjectMember(models.Model):
     project=models.ManyToManyField(BtpProject)
     name=models.ForeignKey(User, on_delete=models.CASCADE, default="")
     accept_status=models.CharField(max_length=100, choices=options, default='rejected')
+
+class Mom(models.Model):
+    date = models.DateField(default=timezone.now)
+    agenda=models.TextField(default="", blank=True)
+    description=models.TextField(default="", blank=True)
+    project=models.ForeignKey(BtpProject, on_delete=models.CASCADE, default="")
+    minutes=models.IntegerField(default=0)
+    points=models.IntegerField(default=0)
+
 
 def slug_generator(sender, instance, *args, **kwargs):
     if not instance.slug:
