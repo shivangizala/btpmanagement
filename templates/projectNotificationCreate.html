@@ -10,16 +10,13 @@
     <script src='main.js'></script>
 </head>
 <body>
-    <form action="{% url 'project-mom-create' slug_text%}" method="post">
+    {%if same_user%}
+    <form action="{% url 'project-mnotification' slug %}" method="post">
         {% csrf_token %}
-        <input type="text"  name="agenda" placeholder="agenda" value="{{q.agenda}}"><br>
-        <input type="text" name="description" placeholder="description" value="{{q.description}}"><br>
-        <input type="date" id="date" name="date"><br>
-        <input type="number" name="minutes" placeholder="minutes of meeting"><br>        
-        <input type="number" name="points" placeholder="grades"><br>      
+        <input type="text"  name="agenda" placeholder="agenda" ><br>
         <input type="Submit">
     </form>
-
+    {%endif%}
     <div>
         {% for message in messages %}
         <h3> {{message}}  </h3>

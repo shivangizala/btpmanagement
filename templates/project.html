@@ -33,6 +33,7 @@
     {%if same_user %}
             <a href="{% url 'project-requests' post.slug%}">Pending requests</a><br>
             <a href="{% url 'project-mom' post.slug%}">Project progress</a><br>
+            <a href="{% url 'project-notification-create' post.slug%}">Notify the team</a><br>
     {%endif%}
     {%if in_team %}
             <a href="{% url 'project-mom' post.slug%}">Project progress</a><br>

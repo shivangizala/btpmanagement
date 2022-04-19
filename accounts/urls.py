@@ -18,6 +18,7 @@ urlpatterns = [
     path("project/<slug:slug_text>/edit", views.projectEdit, name="project-edit"),
     path("project/<slug:slug_text>/delete", views.projectDelete, name="project-delete"),
     path("project/<slug:slug_text>/mom", views.projectMom, name="project-mom"),
+    path("project/<slug:slug_text>/notification/create", views.projectNotificationCreate, name="project-notification-create"),    
     path("project/<slug:slug_text>/mom/create", views.projectMomCreate, name="project-mom-create"),
     path("project/<slug:slug_text>/mom/edit/<int:mom_id>", views.projectMomEdit, name="project-mom-edit"),
     path("project/<slug:slug_text>/mom/delete/<int:mom_id>", views.projectMomDelete, name="project-mom-delete"),

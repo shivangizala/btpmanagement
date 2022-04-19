@@ -20,6 +20,31 @@ from django.shortcuts import get_object_or_404
         # return render(request,'project.html', context)  
 
 @login_required(login_url='/')
+def projectNotificationCreate(request, slug_text):
+    u=get_object_or_404(User, username=request.user.username)  
+    q=get_object_or_404(CollegePeople, name_id=u.id)
+    agenda = request.POST['agenda']
+    notify = TeamNotification.objects.create(agenda=agenda, project_id=q.id )
+    notify.save()
+    if request.method == 'POST':
+        team_member=ProjectMember.objects.filter(project__id=q.id, accept_atatus='accepted')
+        for tm in team_member:
+            
+
+        url="/project/"+slug_text+ "/notification"
+        return redirect(url)
+    else:
+        if u.id==q.author_id:    
+            same_user=True
+        else:
+            same_user=False
+        context={
+            'alug':q.slug,
+            'same_user':same_user
+        }
+        return render(request,'projectNotificationCreate.html', context) 
+
+@login_required(login_url='/')
 def projectMom(request, slug_text):
     if request.method == 'POST':
         pass        
@@ -71,7 +96,11 @@ def projectMomEdit(request, slug_text, mom_id):
             'slug_text':slug_text,
             'q':q
         }
-        return render(request,'projectMomEdit.html', context)   
+        u=get_object_or_404(User, username=request.user.username)  
+        if u.id==q.author_id:    
+            return render(request,'projectMomEdit.html', context) 
+        else:
+            return HttpResponse("<h1>page not found</h1>")
 
 @login_required(login_url='/')
 def projectMomCreate(request, slug_text):
@@ -87,21 +116,31 @@ def projectMomCreate(request, slug_text):
         url="/project/"+slug_text+ "/mom"
         return redirect(url)
     else:
+
         context={
             'slug_text':slug_text,
         }
-        return render(request,'projectMomCreate.html', context)   
+        u=get_object_or_404(User, username=request.user.username)  
+        if u.id==q.author_id:    
+            return render(request,'projectMomCreate.html', context) 
+        else:
+            return HttpResponse("<h1>page not found</h1>")
 
 @login_required(login_url='/')
 def projectMomDelete(request, slug_text, mom_id):
     if request.method == 'POST':
         pass
     else:
-        q=get_object_or_404(Mom, id=mom_id) 
-        q.delete()
-        url="/project/"+slug_text+ "/mom"
-        return redirect(url) 
-
+        u=get_object_or_404(User, username=request.user.username)  
+        a=get_object_or_404(BtpProject, slug=slug_text) 
+        if u.id==a.author_id:    
+            q=get_object_or_404(Mom, id=mom_id) 
+            q.delete()
+            url="/project/"+slug_text+ "/mom"
+            return redirect(url) 
+        else:
+            return HttpResponse("<h1>page not found</h1>")
+        
 @login_required(login_url='/')
 def projectRequestsAccept(request, slug_text, profile_id):
     q=get_object_or_404(BtpProject, slug=slug_text)
@@ -112,6 +151,10 @@ def projectRequestsAccept(request, slug_text, profile_id):
             pm=pm.first()
             pm.accept_status='accepted'
             pm.save()
+            u=get_object_or_404(User, username=request.user.username)
+            content= "you are accepted in "+ q.title
+            n = Notification.objects.create(name_id=profile_id, content=content)
+            n.save()
         # else: #value=decline
         #     pm = ProjectMember.objects.filter( project__id=q.id,name_id=profile_id)
         #     pm=pm.first()
@@ -130,6 +173,10 @@ def projectRequestsDecline(request, slug_text, profile_id):
             pm = ProjectMember.objects.filter( project__id=q.id,name_id=profile_id)
             pm=pm.first()
             pm.delete()
+            u=get_object_or_404(User, username=request.user.username)
+            content= "you are rejected in "+ q.title
+            n = Notification.objects.create(name_id=profile_id, content=content)
+            n.save()
         url='/project/'+slug_text+'/requests' #vvvvvvvvvvvvimp
         return redirect(url)
     else:
@@ -210,11 +257,17 @@ def project(request, slug_text):
             pm.save()
             pm.project.add(q)
             pm.save()
+            content=u.first_name+" "+ u.last_name + " has applied for "+ q.title
+            n = Notification.objects.create(name_id=q.author_id, content=content)
+            n.save()
         else: # status_value=='withdraw':
             set_status='rejected'
             pm = ProjectMember.objects.filter(name_id=u.id, project__id=q.id)
             pm=pm.first()
             pm.delete()
+            content=u.first_name+" "+ u.last_name + " has withdrawn from "+ q.title
+            n = Notification.objects.create(name_id=q.author_id, content=content)
+            n.save()
         url='/myprojects/' + str(u.id)
         return redirect(url)
     else:

@@ -55,6 +55,10 @@ class Mom(models.Model):
     minutes=models.IntegerField(default=0)
     points=models.IntegerField(default=0)
 
+class TeamNotification(models.Model): #like meeting create delete any news
+    date = models.DateTimeField(default=timezone.now)
+    project=models.ForeignKey(BtpProject, on_delete=models.CASCADE, default="")
+    agenda=models.TextField(default="", blank=True)
 
 def slug_generator(sender, instance, *args, **kwargs):
     if not instance.slug:

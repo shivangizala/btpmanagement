@@ -11,6 +11,9 @@
         {%else%}
         {%endif%}
     {%endfor%}
+    {%if  team_prof%}
+        <a href="{% url 'project-mom-create' slug%}">add new </a><br><br>
+    {%endif%}
 {%else%}
     <h1>Page not found.</h1>
 {%endif%}
