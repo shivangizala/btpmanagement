@@ -31,9 +31,10 @@ class BtpProject(models.Model):
     publish_date = models.DateField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, default="")
     content=models.TextField(default="", blank=True)
-    status = models.CharField(max_length=100, choices=options, default='open')
+    status = models.CharField(max_length=100, choices=options, default='open') #accepted,requested, decline all
     total_applications=models.IntegerField(default=0)
     students_required=models.IntegerField(default=0)
+    projectid=models.CharField(max_length=10, default="")
     grade=models.IntegerField(default=0)
     def __str__(self):
        return self.title

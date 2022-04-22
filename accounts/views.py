@@ -53,7 +53,7 @@ def events(request):
         pass
     else:
         u=get_object_or_404(User, username=request.user.username)  
-        all_events=Event.objects.filter( id=u.id)
+        all_events=Event.objects.filter( name_id=u.id)
         context={
             'all_events':all_events,
         }
@@ -305,6 +305,10 @@ def project(request, slug_text):
             content=u.first_name+" "+ u.last_name + " has applied for "+ q.title
             n = Notification.objects.create(name_id=q.author_id, content=content)
             n.save()
+            total_applications=q.total_applications
+            total_applications=total_applications+1
+            BtpProject.objects.filter(slug=slug_text).update(total_applications=total_applications)
+
         else: # status_value=='withdraw':
             set_status='rejected'
             pm = ProjectMember.objects.filter(name_id=u.id, project__id=q.id)
@@ -400,13 +404,16 @@ def projectEdit(request, slug_text):
 @login_required(login_url='/')
 def createProject(request):
     if request.method == 'POST':
+        u=get_object_or_404(User, username=request.user.username)  
         title = request.POST['title']
         publish_date = request.POST['publish_date']
         students_required = request.POST['students_required']
         content = request.POST['content']
         status = request.POST['status']
-        u=get_object_or_404(User, username=request.user.username)  
-        project = BtpProject.objects.create(title=title, author_id=u.id, publish_date=publish_date, content=content, status=status ,students_required=students_required)
+        total_projects=BtpProject.objects.filter(author_id=u.id).all().count()
+        total_projects=total_projects+1
+        projectid=u.first_name[0]+u.last_name[0]+"-"+str(total_projects)
+        project = BtpProject.objects.create(title=title, author_id=u.id, publish_date=publish_date, content=content, status=status ,students_required=students_required, projectid=projectid)
         project.save()
         return redirect('homepage')
     else:

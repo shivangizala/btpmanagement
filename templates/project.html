@@ -16,7 +16,7 @@
             <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
                 <label class="labels" style="width: 24rem;">Project ID: </label>
                 <tr>
-                    <textarea class="input-box-css" name="text" placeholder="" disabled>2022-JP-003</textarea> 
+                    <textarea class="input-box-css" name="text" placeholder="" disabled>{{post.projectid}}</textarea> 
                 </tr>
             </div>
 
@@ -59,6 +59,13 @@
             </div>
 
             <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
+                <label class="labels" style="width: 24rem;">Total Applications: </label>
+                <tr>
+                    <textarea class="input-box-css" name="total_applications" placeholder="" disabled>{{post.total_applications}}</textarea>
+                </tr>
+            </div>
+
+            <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
                 <label class="labels" style="width: 24rem;">Status</label>
                 <tr>
                     <textarea class="input-box-css" name="text" placeholder="" disabled>{{post.status}}</textarea>
@@ -84,7 +91,7 @@
                     {% csrf_token %}
                     <input type="hidden" name="accept_status" placeholder="accept_status" value="apply"><br>
                     <button type="Submit"  class="btn profile-button edit-butten-Add-css-new-blue"
-                    style="font-size: 2.2rem;  padding-top: 0rem; " type="button" >Apply</button>
+                    style="font-size: 2.2rem;  padding-top: 0rem; "  >Apply</button>
                 </form>
             {% elif setted_status == 1 %} <!-- accepted -->
                 <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
@@ -94,7 +101,8 @@
                 <form action="" method="post">    
                     {% csrf_token %}
                     <input type="hidden" name="accept_status" placeholder="accept_status" value="withdraw"><br>
-                    <button type="Submit">withdraw</button>
+                    <button type="Submit"  class="btn profile-button edit-butten-Add-css-new-blue"
+                    style="font-size: 2.2rem;  padding-top: 0rem; " >Withdraw</button>
                 </form>
             {%endif%}
             {%endif%}
