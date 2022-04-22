@@ -1,18 +1,76 @@
-{% for each_request in all_requests%}
-<!-- #vvvvimp -->
-        {{each_request.name.email}}<br> 
-        {{each_request.name.username}}<br>
-        {{title}}<br>
-        <a href="{% url 'profile' each_request.name.id %}">Profile Link</a>
-        {{each_request.name.email}}
-        <form action="{% url 'project-accept' slug each_request.name.id%}" method="post">    
-                {% csrf_token %}
-                <input type="hidden" name="value" placeholder="accept" value="accept"><br>
-                <button type="Submit">Accept</button>
-        </form>
-        <form action="{% url 'project-decline' slug each_request.name.id%}" method="post">    
-                {% csrf_token %}
-                <input type="hidden" name="value" placeholder="decline" value="decline"><br>
-                <button type="Submit">Decline</button>
-        </form>
-{%endfor%}
+{% extends 'myBase.html'%}
+
+{% load static %}
+
+{%block block1%}
+<title>Pending Requests</title>
+<link rel="stylesheet" href="{%static 'CSS/Learnmore.css' %}">
+{%endblock block1%}
+{%block block2%}
+
+<!--Main Section Start-->
+<div class="container rounded main-learn-container-css">
+    <!--Students Request Start-->
+
+    <span class="project-progress-table-css" style="padding-top: 20rem; font-size:5rem;">Project {{title}} Requests</span>
+    <table class="table table-bordered table-css">
+        <thead>
+            <tr>
+                <th style="text-align: center;">Students</th>
+                <th style="text-align: center;">Student status</th>
+                <th style="text-align: center;">Accept</th>
+                <th style="text-align: center;">Decline</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for each_request in all_requests%}
+            <!--1-->
+            <tr>
+                <td>
+                    <!-- #vvvvimp -->
+                    <a href="{% url 'profile' each_request.name.id %}"> {{each_request.name.email}}</a>
+                </td>
+                <td>Project Not taken</td>
+                <td>
+                    <!--Accept Butten Start-->
+                    <form action="{% url 'project-accept' slug each_request.name.id%}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="value" placeholder="accept" value="accept"><br>
+                        <div class="main-Profile-butten-container-css">
+                            <span>
+                                <button class="btn profile-button edit-butten-css"
+                                    style="font-size: 2.8rem; background-color: #0AEC20;  padding-top: 0rem; "
+                                    type="submit">
+                                    <a style="color: white; text-decoration: none;">
+                                        <b>Accept</b> </a>
+                                </button></span>
+                        </div>
+                    </form>
+                    <!--Accept Butten End-->
+                </td>
+                <td>
+                    <!--Decline Butten Start-->
+                    <form action="{% url 'project-decline' slug each_request.name.id%}" method="post"> 
+                        {% csrf_token %}
+                        <input type="hidden" name="value" placeholder="decline" value="decline"><br>
+                    <div class="main-Profile-butten-container-css">
+                        <span>
+                            <button class="btn profile-button edit-butten-css"
+                                style="font-size: 2.8rem;  padding-top: 0rem; " type="submit">
+                                <a style="color: white; text-decoration: none;">
+                                    <b>Decline</b> </a>
+                            </button></span>
+                    </div>
+                </form>
+                    <!-- Decline Butten End-->
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+    <!--Students Request End-->
+</div>
+</div>
+<!--Main Section End-->
+
+{%endblock block2%}

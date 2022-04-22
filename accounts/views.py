@@ -361,14 +361,16 @@ def project(request, slug_text):
 @login_required(login_url='/')
 def projectDelete(request, slug_text):
     if request.method == 'POST':
-        pass
-    else:
         q=get_object_or_404(BtpProject, slug=slug_text)
         u=User.objects.get(username=request.user.username)
         #see if its the creator of the project or not
         if u.id==q.author_id:
             q.delete()
-        return redirect(request, 'homepage')
+        url="/myprojects/" + str(u.id)
+        return redirect(url)
+    else:
+        return HttpResponse("<h1>page not found</h1>")
+    
 
 @login_required(login_url='/')
 def projectEdit(request, slug_text):

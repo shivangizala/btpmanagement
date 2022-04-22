@@ -1,4 +1,32 @@
+{% extends 'myBase.html'%}
+
+{% load static %}
+
+{%block block1%}
+<title></title>
+<link rel="stylesheet" href="{%static 'CSS/notification.css' %}">
+{%endblock block1%}
+{%block block2%}
+
+ <!--Main Section Start-->
+ <div class="container rounded main-learn-container-css">
+    <!--Project Progress Table Start-->
+
+    <span class="project-progress-table-css" style="padding-top: 20rem; font-size:4rem">
+        Notification
+    </span>
 {% for a in q%}
-    {{a.moment}}
-    {{a.content}}<br>
+   <!--Notification Start-->
+    <div class="card Rectangle-css" style="background-color: bue;">
+        <div class="card-body">
+            <p class="card-text project-name-css">
+                <b class="span-project-name-css">{{a.content}}</b>
+                <p class="b-project-name-css">{{a.moment}}</p>
+            </p>
+        </div>
+    </div>
+    <!--Notifucation End-->
 {%endfor%}
+    <!--Main Section End-->
+
+{%endblock block2%}

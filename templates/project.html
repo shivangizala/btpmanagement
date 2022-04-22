@@ -155,12 +155,17 @@
             </div>
             <div>
                 <!--Butten Start-->
+                <form action=" {% url 'project-delete' post.slug%}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden"  >
                 <span>
                     <button class="btn profile-button edit-butten-Add-css-new"
-                        style="font-size: 2.2rem;  padding-top: 0rem; " type="button">
-                        <a href="{% url 'project-delete' post.slug%}" style="color: black; text-decoration: none;">
+                        style="font-size: 2.2rem;  padding-top: 0rem; " type="submit">
+                        <a style="color: black; text-decoration: none;">
                             <b>Delete Project</b> </a>
-                    </button></span>
+                    </button>
+                </span>
+                </form>
                 <!--Butten End-->
             </div>
             {%endif%}

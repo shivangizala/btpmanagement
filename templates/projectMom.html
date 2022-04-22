@@ -1,19 +1,82 @@
-{%if  team_prof or in_team%}
-    <h1>project mom</h1>
-    {{title}}
+
+{% extends 'myBase.html'%}
+
+{% load static %}
+{%if team_prof or in_team%}
+
+{%block block1%}
+<title>Profile Edit</title>
+<link rel="stylesheet" href="{%static 'CSS/Learnmore.css' %}">
+{%endblock block1%}
+{%block block2%}
+
+<!--Main Section Start-->
+<div class="container rounded main-learn-container-css">
+    <!--Project Progress Table Start-->
+
+    <span class="project-progress-table-css" style="padding-top: 20rem; font-size:4rem">
+        Project Progress of {{title}}
+    </span>
     {% for a in all_mom%}
-        {{a.date}}
-        {{a.agenda}}
-        {{a.description}}
-        {%if  team_prof%}
-        <a href="{% url 'project-mom-edit' slug a.id%}">edit </a><br>
-        <a href="{% url 'project-mom-delete' slug a.id%}">delete </a><br><br>
-        {%else%}
-        {%endif%}
+    <div class="card Rectangle-css">
+        <div class="card-body">
+            <p class="card-text project-name-css">
+                <b class="b-project-name-css">Work Completed date:</b>
+                <span class="span-project-name-css">{{a.date}}</span>
+            </p>
+            <p class="card-text project-name-css">
+                <b class="b-project-name-css">Meeting agenda:</b>
+                <span class="span-project-name-css">{{a.agenda}}</span>
+            </p>
+            <p class="card-text project-name-css">
+                <b class="b-project-name-css">Meeting Description:</b>
+                <span class="span-project-name-css">{{a.description}}</span>
+            </p>
+            <p class="card-text project-name-css">
+                <b class="b-project-name-css">Minutes of Meeting:</b>
+                <span class="span-project-name-css">{{a.minutes}}</span>
+            </p>
+            <p class="card-text project-name-css">
+                <b class="b-project-name-css">Points:</b>
+                <span class="span-project-name-css">{{a.points}}</span>
+            </p>
+            <!--edit Butten Start-->
+            <span>
+                <button class="btn profile-button" style="font-size: 2.2rem; padding-top: 0rem; 
+                margin-left: 4.5%; background: #128bee;width: 10rem; margin-bottom: 1rem; 
+                height: 3.5rem; margin-right:1.5rem" type="button">
+                    <a href="{% url 'project-mom-edit' slug a.id%}" style="color: black; text-decoration: none;">
+                        <b>Edit</b> </a>
+                </button>
+            </span>
+            <!--edit Butten End-->
+
+            <!--Delete Butten Start-->
+            <span>
+                <button class="btn profile-button" style="font-size: 2.2rem;  padding-top: 0rem;
+                background:red; width: 10rem; height: 3.5rem; margin-bottom: 1rem;" type="button">
+                    <a href="{% url 'project-mom-delete' slug a.id%}" style="color: black; text-decoration: none;">
+                        <b>Delete</b> </a>
+                </button>
+            </span>
+            <!-- Delete Butten End -->
+        </div>
+    </div>
     {%endfor%}
-    {%if  team_prof%}
-        <a href="{% url 'project-mom-create' slug%}">add new </a><br><br>
+    {%if team_prof%}
+
+    <!--Add Project Progress Butten Start-->
+    <span>
+        <button class="btn profile-button " style="font-size: 2.8rem; padding-top: 0rem; background: #E9EE12; width: 35rem; 
+            height: 5rem; margin-left: 6.7%;" type="button">
+            <a href="{% url 'project-mom-create' slug%}" style="color: black; text-decoration: none;">
+                <b>Add Project Progress</b> </a>
+        </button></span>
+    <!--Add Project Progress Butten End-->
+
+    <!--Main Section End-->
     {%endif%}
+    {%endblock block2%}
 {%else%}
-    <h1>Page not found.</h1>
+<h1>Page not found.</h1>
 {%endif%}
