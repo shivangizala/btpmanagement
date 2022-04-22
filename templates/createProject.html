@@ -1,38 +1,73 @@
-{% if user.is_authenticated%}
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Registeration</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
-</head>
-<body>
-    <form action="create-project" method="post">
-        {% csrf_token %}
-        <input type="text" value={{user.username}} name="username" placeholder="username" readonly><br>
-        <input type="text" name="title" placeholder="Title"><br>
-        <label for="publish_date">publish_date:</label>
-        <input type="date" id="birthday" name="publish_date"><br>
-        <input type="text" name="content" placeholder="content"><br>
-        <label for="status">Choose a status:</label>
-        <select name="status" id="status">
-        <option value="open">Open</option>
-        <option value="closed">Closed</option>
-        </select><br>
-        <input type="Submit">
-    </form>
+{% extends 'myBase.html'%}
 
-    <div>
-        {% for message in messages %}
-        <h3> {{message}}  </h3>
-        {% endfor %}
+{% load static %}
+
+{%block block1%}
+<title>Create Project</title>
+<link rel="stylesheet" href="{%static 'CSS/createproject.css' %}">
+{%endblock block1%}
+{%block block2%}
+
+<!-- Main section start-->
+<form action="create-project" method="post">
+    {% csrf_token %}
+    <div class="container rounded main-learn-container-css">
+        <div class="row">
+            <div class="col-css">
+                <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
+                    <label class="labels" style="width: 24rem;">Project Name: </label>
+                    <tr>
+                        <input class="input-box-css" style="height: 8.5rem;" type="text" name="title" placeholder="">
+                    </tr>
+                </div>
+
+                <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
+                    <label class="labels" style="width: 24rem;"> Project Info.: </label>
+                    <tr>
+                        <input class="input-box-css" style="height: 13rem;" type="text" name="content" placeholder="">
+                    </tr>
+                </div>
+
+                <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
+                    <label class="labels" style="width: 24rem;">Student Required: </label>
+                    <tr>
+                        <input class="input-box-css" placeholder="" type="number" name="students_required">
+                    </tr>
+                </div>
+
+                <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
+                    <label class="labels" style="width: 24rem;">Registration End Date: </label>
+                    <tr>
+                        <input class="input-box-css" type="date" name="publish_date">
+                    </tr>
+                </div>
+
+                <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem; ">
+                    <label class="labels" style="width: 24rem; margin-top:1rem">Choose a status: </label>
+                    <span class="dropdown-outer-css">
+                        <span class="dropdown">
+                            <select name="status" id="status">
+                                <option value="open">Open</option>
+                                <option value="closed">Closed</option>
+                            </select><br>
+                        </span></span>
+                </div>
+
+
+                <div class="main-Profile-container-css">
+                    <span>
+                        <button class="btn profile-button edit-butten-css"
+                            style="font-size: 2.2rem; border-radius: 3rem; padding-top: 0rem; background-color: #18B17A;"
+                            type="Submit">
+                            Create Project
+                        </button></span>
+                </div>
+
+            </div>
+    
+        </div>
     </div>
+</form>
+<!--main section End-->
 
-</body>
-</html>
-{% else %}	
-<h1>Page not found.</h1>
-{% endif %}
+{%endblock block2%}

@@ -1,35 +1,81 @@
-{% if user.is_authenticated  %}
-<!-- {{all_projects.all.count}} -->
-    <h1>All the projects of user:{{user.username}}</h1>
-    <form action="myprojects" method="post">
-    {% csrf_token %}
-    <input type="text" name="search_value" placeholder="search" value="search"><br>
-    <input type="Submit">
-    </form>
+{% extends 'myBase.html'%}
 
-    <!-- <button><a  href="requests">pending requests</a></button> -->
+{% load static %}
+
+{%block block1%}
+<title>Home Page</title>
+<link rel="stylesheet" href="{%static 'CSS/Homepage.css' %}">
+{%endblock block1%}
+{%block block2%}
+<!--Main part start-->
+        <!-- <h1>All the projects of user:{{user.username}}</h1>  -->
+        <!--Search Bar Start-->
+        <div class="main-container-css" style=" text-align: center; margin-left: 5%; margin-right: 5%;">
+            <form class="d-flex" action="myprojects" method="post">
+                {% csrf_token %}
+                <input class="form-control me-2" style="display: inline-block;  background-color: #52AB98; height: 5rem; border-radius: 34px; color: black; border: 0px;  max-width: 105rem; margin-right: 2rem; margin-bottom: 0.5rem;" type="text"
+                name="search_value" placeholder="search" value="search" aria-label="Search" name="search_value" >
+                <button class="btn btn-outline-success search-butten-css" style="display: inline-block; border: 0px; padding-top: 0px;
+                font-size: 3rem; border-radius: 34px; margin-bottom: 1px;" type="submit" >Search</button>
+            </form>
+        </div>
+        <!--Search Bar End-->
+
+
+        <!-- <button><a  href="requests">pending requests</a></button> -->
     {%if not is_student%}
-        {% for a in all_projects%}
-            {{a.title}}
-            {{a.slug}}
-            {{a.content}}
-            {{a.author}}
-            {{a.publish_date}}<br>
-            <a href="{% url 'project' a.slug%}">view more </a><br>
-            {%if same_user%}
-            <a href="{% url 'project-edit' a.slug%}">edit </a><br>
-            <a href="{% url 'project-delete' a.slug%}">delete </a><br><br>
-            {%endif%}
-        {%endfor%}
+    {% for a in all_projects%}
+        <!--Div 1-->
+        <div class="card Rectangle-css">
+            <div class="card-body">
+                <p class="card-text project-name-css">
+                    <b class="b-project-name-css">Project ID:</b>
+                    <span class="span-project-name-css">2022-JP-001</span>
+                </p>
+                <p class="card-text project-name-css">
+                    <b class="b-project-name-css">Project Name:</b>
+                    <span class="span-project-name-css">{{a.title}}</span>
+                </p>
+                <p class="card-text project-name-css">
+                    <b class="b-project-name-css">Status:</b>
+                    <span class="span-project-name-css">{{a.status}}</span>
+                  </p>
+                <a href="{% url 'project' a.slug %}"class="btn button-project-name-css"
+                    style="font-size: 2rem;border: 0rem; padding: 0px; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+                    View More </a>
+            </div>
+        </div>
+    {%endfor%}
     {%else%}
         {% for a in all_projects%}
+        <div>
             {% for b in a.project.all%}
-                {{b.title}}<br>
-                {{a.accept_status}}<br>
-                <a href="{% url 'project' b.slug %}">view more </a><br>
+            <!--Div 1-->
+            <div class="card Rectangle-css">
+                <div class="card-body">
+                    <p class="card-text project-name-css">
+                        <b class="b-project-name-css">Project Name:</b>
+                        <span class="span-project-name-css">{{b.title}}</span>
+                    </p>
+                    <p class="card-text project-name-css">
+                        <b class="b-project-name-css">Status:</b>
+                        <span class="span-project-name-css">{{a.accept_status}}</span>
+                      </p>
+                    <a href="{% url 'project' b.slug %}"class="btn button-project-name-css"
+                        style="font-size: 2rem;border: 0rem; padding: 0px; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+                        View More </a>
+                </div>
+            </div>
             {%endfor%}
         {%endfor%}
     {%endif%}
-{% else %}	
-    <h1>Page not found.</h1>
-{% endif %}
+    
+
+
+        <!--Project Name Section Start-->
+        <div>
+            
+
+        </div>
+        <!--Project Name Section end-->
+{%endblock block2%}

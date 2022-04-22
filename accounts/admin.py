@@ -16,8 +16,18 @@ class ProjectMemberAdmin(admin.ModelAdmin):
 class MomAdmin(admin.ModelAdmin):
     list_display=('project','description')
 
+class TeamNotificationAdmin(admin.ModelAdmin):
+    list_display=('project','agenda')
+
+class EventAdmin(admin.ModelAdmin):
+    list_display=('date','agenda')
+
 admin.site.register(BtpProject, BtpProjectAdmin)
 admin.site.register(CollegePeople, CollegePeopleAdmin)
 admin.site.register(Notification, NotificationAdmin)
 admin.site.register(ProjectMember, ProjectMemberAdmin)
 admin.site.register(Mom, MomAdmin)
+admin.site.register(TeamNotification, TeamNotificationAdmin)
+admin.site.register(Event, EventAdmin)
+
+

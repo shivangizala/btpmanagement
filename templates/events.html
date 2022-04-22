@@ -1,0 +1,8 @@
+{% if user.is_authenticated %}
+        {% for a in all_events%}
+            {{a.date}}<br>
+            {{a.agenda}}<br>
+        {%endfor%}
+{% else %}	
+<h1>Page not found.</h1>
+{% endif %}

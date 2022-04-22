@@ -10,13 +10,13 @@
     <script src='main.js'></script>
 </head>
 <body>
-    {%if same_user%}
-    <form action="{% url 'project-notification-create' slug %}" method="post">
+    <form action="{% url 'project-create-event' slug_text%}" method="post">
         {% csrf_token %}
         <input type="text"  name="agenda" placeholder="agenda" ><br>
+        <input type="date" id="date" name="date"><br>             
         <input type="Submit">
     </form>
-    {%endif%}
+
     <div>
         {% for message in messages %}
         <h3> {{message}}  </h3>

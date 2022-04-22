@@ -17,21 +17,63 @@ from django.shortcuts import get_object_or_404
 #     if request.method == 'POST':
 #         return redirect( 'project/slug_text')
 #     else:
-        # return render(request,'project.html', context)  
+#         return render(request,'project.html', context)  
+
+@login_required(login_url='/')
+def trial(request):
+    return render(request,'trial.html')  
+
+@login_required(login_url='/')
+def tryy(request):
+    return render(request,'try.html')  
+
+@login_required(login_url='/')
+def projectCreateEvent(request, slug_text):
+    if request.method == 'POST':
+        u=get_object_or_404(User, username=request.user.username) 
+        q=get_object_or_404(BtpProject, slug=slug_text) 
+        agenda = request.POST['agenda']
+        date = request.POST['date']
+        team_members=ProjectMember.objects.filter(project__id=q.id, accept_status='accepted')
+        for tm in team_members:
+            e = Event.objects.create(name_id=tm.name_id, agenda=agenda, date=date) 
+            e.save()
+        e = Event.objects.create(name_id=u.id, agenda=agenda,date=date) 
+        e.save()
+        return redirect( 'events')
+    else:
+        context={
+            'slug_text':slug_text
+        }
+        return render(request,'projectCreateEvent.html', context)  
+
+@login_required(login_url='/')
+def events(request):
+    if request.method == 'POST':
+        pass
+    else:
+        u=get_object_or_404(User, username=request.user.username)  
+        all_events=Event.objects.filter( id=u.id)
+        context={
+            'all_events':all_events,
+        }
+        return render(request,'events.html', context) 
 
 @login_required(login_url='/')
 def projectNotificationCreate(request, slug_text):
     u=get_object_or_404(User, username=request.user.username)  
-    q=get_object_or_404(CollegePeople, name_id=u.id)
-    agenda = request.POST['agenda']
-    notify = TeamNotification.objects.create(agenda=agenda, project_id=q.id )
-    notify.save()
+    q=get_object_or_404(BtpProject, slug=slug_text)
     if request.method == 'POST':
-        team_member=ProjectMember.objects.filter(project__id=q.id, accept_atatus='accepted')
-        for tm in team_member:
-            
-
-        url="/project/"+slug_text+ "/notification"
+        agenda = request.POST['agenda']
+        notify = TeamNotification.objects.create(agenda=agenda, project_id=q.id )
+        notify.save()
+        team_members=ProjectMember.objects.filter(project__id=q.id, accept_status='accepted')
+        for tm in team_members:
+            n = Notification.objects.create(name_id=tm.name_id, content=agenda) 
+            n.save()
+        n = Notification.objects.create(name_id=u.id, content=agenda) 
+        n.save()
+        url="notification"
         return redirect(url)
     else:
         if u.id==q.author_id:    
@@ -39,7 +81,7 @@ def projectNotificationCreate(request, slug_text):
         else:
             same_user=False
         context={
-            'alug':q.slug,
+            'slug':q.slug,
             'same_user':same_user
         }
         return render(request,'projectNotificationCreate.html', context) 
@@ -97,6 +139,7 @@ def projectMomEdit(request, slug_text, mom_id):
             'q':q
         }
         u=get_object_or_404(User, username=request.user.username)  
+        q=get_object_or_404(BtpProject, slug=slug_text) 
         if u.id==q.author_id:    
             return render(request,'projectMomEdit.html', context) 
         else:
@@ -121,6 +164,7 @@ def projectMomCreate(request, slug_text):
             'slug_text':slug_text,
         }
         u=get_object_or_404(User, username=request.user.username)  
+        q=get_object_or_404(BtpProject, slug=slug_text) 
         if u.id==q.author_id:    
             return render(request,'projectMomCreate.html', context) 
         else:
@@ -231,7 +275,8 @@ def profileEdit(request, profile_id):
         course = request.POST['course']
         User.objects.filter(id=u.id).update(first_name=first_name, last_name=last_name)
         CollegePeople.objects.filter(name_id=profile_id).update(cpi=cpi, course=course)
-        return redirect( 'profile')
+        url="/profile/"+str(u.id)
+        return redirect( url)
     else:
         u=get_object_or_404(User, username=request.user.username)
         q=get_object_or_404(CollegePeople, name_id=u.id)
@@ -327,14 +372,17 @@ def projectDelete(request, slug_text):
 
 @login_required(login_url='/')
 def projectEdit(request, slug_text):
+    q=get_object_or_404(BtpProject,slug=slug_text)
     if request.method == 'POST':
         publish_date = request.POST['publish_date']
+        students_required = request.POST['students_required']
         content = request.POST['content']
         status = request.POST['status']
         grade = request.POST['grade']
         grade=int(grade)
-        BtpProject.objects.filter(slug=slug_text).update(publish_date=publish_date, content=content, status=status , grade=grade)
-        return redirect( 'myprojects')
+        BtpProject.objects.filter(slug=slug_text).update(publish_date=publish_date, content=content, status=status , grade=grade,students_required=int(students_required))
+        url='/myprojects/'+ str(q.id)
+        return redirect( url)
     else:
         #find project using slug in request
         q=get_object_or_404(BtpProject, slug=slug_text)
@@ -352,10 +400,11 @@ def createProject(request):
     if request.method == 'POST':
         title = request.POST['title']
         publish_date = request.POST['publish_date']
+        students_required = request.POST['students_required']
         content = request.POST['content']
         status = request.POST['status']
         u=get_object_or_404(User, username=request.user.username)  
-        project = BtpProject.objects.create(title=title, author_id=u.id, publish_date=publish_date, content=content, status=status )
+        project = BtpProject.objects.create(title=title, author_id=u.id, publish_date=publish_date, content=content, status=status ,students_required=students_required)
         project.save()
         return redirect('homepage')
     else:
@@ -412,10 +461,6 @@ def myprojects(request, profile_id): #id of person who created it
         'same_user': same_user
     }
     return render(request,'myprojects.html',context)  
-
-@login_required(login_url='/')
-def timetable(request):
-    return render(request,'timetable.html')  
 
 @login_required(login_url='/')
 def notification(request):

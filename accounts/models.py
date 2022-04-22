@@ -33,6 +33,7 @@ class BtpProject(models.Model):
     content=models.TextField(default="", blank=True)
     status = models.CharField(max_length=100, choices=options, default='open')
     total_applications=models.IntegerField(default=0)
+    students_required=models.IntegerField(default=0)
     grade=models.IntegerField(default=0)
     def __str__(self):
        return self.title
@@ -59,6 +60,17 @@ class TeamNotification(models.Model): #like meeting create delete any news
     date = models.DateTimeField(default=timezone.now)
     project=models.ForeignKey(BtpProject, on_delete=models.CASCADE, default="")
     agenda=models.TextField(default="", blank=True)
+
+class Event(models.Model):
+    date = models.DateField(default=timezone.now)
+    agenda=models.TextField(default="", blank=True)
+    name=models.ForeignKey(User, on_delete=models.CASCADE, default="")
+
+# class Meeting:
+#     date = models.DateField(default=timezone.now)
+#     agenda=models.TextField(default="", blank=True)
+#     project=models.ForeignKey(BtpProject, on_delete=models.CASCADE, default="")
+
 
 def slug_generator(sender, instance, *args, **kwargs):
     if not instance.slug:

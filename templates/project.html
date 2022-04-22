@@ -1,44 +1,183 @@
-{% if user.is_authenticated %}
-    projects/{{post.slug}}<br>
-    title:{{post.title}}<br>
-    content{{post.content}}<br>
-    author{{post.author}}<br>
-    date:{{post.publish_date}}<br>
-    status:{{post.status}}<br>
-    grade:{{post.grade}}<br>
-    total_applications:{{post.total_applications}}<br>
-    team members:<br>
-    {% for a in team%}
-        {{a.name.email}}<br>
-    {%endfor%}
-    <!-- buttons for student -->
-    {%if is_student%}
-        {% if setted_status == 0 %}     <!-- rejected -->
-            <form action="" method="post">    
-                {% csrf_token %}
-                <input type="hidden" name="accept_status" placeholder="accept_status" value="apply"><br>
-                <button type="Submit">Apply</button>
-            </form>
-        {% elif setted_status == 1 %} <!-- accepted -->
-            <h3>you are accepted here</h3> 
-        {% else %}                      <!-- requested -->
-            <form action="" method="post">    
-                {% csrf_token %}
-                <input type="hidden" name="accept_status" placeholder="accept_status" value="withdraw"><br>
-                <button type="Submit">withdraw</button>
-            </form>
-        {%endif%}
-    {%endif%}
+{% extends 'myBase.html'%}
 
-    {%if same_user %}
-            <a href="{% url 'project-requests' post.slug%}">Pending requests</a><br>
-            <a href="{% url 'project-mom' post.slug%}">Project progress</a><br>
-            <a href="{% url 'project-notification-create' post.slug%}">Notify the team</a><br>
-    {%endif%}
-    {%if in_team %}
-            <a href="{% url 'project-mom' post.slug%}">Project progress</a><br>
-    {%endif%}
+{% load static %}
 
-{% else %}	
-    <h1>Page not found.</h1>
-{% endif %}
+{%block block1%}
+<title>Learnmoree</title>
+<link rel="stylesheet" href="{%static 'CSS/Learnmore.css' %}">
+{%endblock block1%}
+
+{%block block2%}
+
+<!--Main Section Start-->
+<div class="container rounded main-learn-container-css">
+    <div class="row">
+        <div class="col-css">
+            <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
+                <label class="labels" style="width: 24rem;">Project ID: </label>
+                <tr>
+                    <textarea class="input-box-css" name="text" placeholder="" disabled>2022-JP-003</textarea> 
+                </tr>
+            </div>
+
+            <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
+                <label class="labels" style="width: 24rem;">Project Name: </label>
+                <tr>
+                    <textarea class="input-box-css" style="height: 5rem;" name="text" placeholder=""
+                        disabled>{{post.title}}</textarea>
+                </tr>
+            </div>
+
+            <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
+                <label class="labels" style="width: 24rem;"> Project Info.: </label>
+                <tr>
+                    <textarea class="input-box-css" style="height: 13rem;" name="text" placeholder=""
+                        disabled>{{post.content}}</textarea>
+                </tr>
+            </div>
+
+            <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
+                <label class="labels" style="width: 24rem;">Student Required: </label>
+                <tr>
+                    <textarea class="input-box-css" name="text" placeholder="" disabled>{{post.students_required}}</textarea>
+                </tr>
+            </div>
+
+
+            <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
+                <label class="labels" style="width: 24rem;">Registration End Date: </label>
+                <tr>
+                    <textarea class="input-box-css" name="text" placeholder="" disabled>{{post.publish_date}}</textarea>
+                </tr>
+            </div>
+
+            <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
+                <label class="labels" style="width: 24rem;">Grade: </label>
+                <tr>
+                    <textarea class="input-box-css" name="text" placeholder="" disabled>{{post.grade}}</textarea>
+                </tr>
+            </div>
+
+            <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
+                <label class="labels" style="width: 24rem;">Status</label>
+                <tr>
+                    <textarea class="input-box-css" name="text" placeholder="" disabled>{{post.status}}</textarea>
+                </tr>
+            </div>
+            
+            <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
+                <label class="labels" style="width: 24rem; ">Team members: </label>
+                <tr>
+                    <span style="margin-left:2rem;">
+                        {% for a in team%}
+                        {{a.name.email}},
+                    {%endfor%}
+                    </span>
+                        
+                </tr>
+            </div>
+            
+            <!-- buttons for student -->
+            {%if is_student%}
+            {% if setted_status == 0 %}     <!-- rejected -->
+                <form action="" method="post">    
+                    {% csrf_token %}
+                    <input type="hidden" name="accept_status" placeholder="accept_status" value="apply"><br>
+                    <button type="Submit"  class="btn profile-button edit-butten-Add-css-new-blue"
+                    style="font-size: 2.2rem;  padding-top: 0rem; " type="button" >Apply</button>
+                </form>
+            {% elif setted_status == 1 %} <!-- accepted -->
+                <div class="col-md-12 col-name-line-css" style="font-size: 2.2rem;">
+                    <label class="labels" style="color:green"">You are accepted view Project Progress: </label>
+                </div>
+            {% else %}                      <!-- requested -->
+                <form action="" method="post">    
+                    {% csrf_token %}
+                    <input type="hidden" name="accept_status" placeholder="accept_status" value="withdraw"><br>
+                    <button type="Submit">withdraw</button>
+                </form>
+            {%endif%}
+            {%endif%}
+            {%if same_user %}
+            <div>
+                <!--Butten Start-->
+                <span>
+                    <button class="btn profile-button edit-butten-Add-css-new"
+                        style="font-size: 2.2rem;  padding-top: 0rem; " type="button">
+                        <a href="{% url 'project-mom' post.slug%}" style="color: black; text-decoration: none;">
+                            <b>View Project Progress</b> </a>
+                    </button></span>
+                <!--Butten End-->
+            </div>
+
+            <div>
+                <!--Butten Start-->
+                <span>
+                    <button class="btn profile-button edit-butten-Add-css-new"
+                        style="font-size: 2.2rem;  padding-top: 0rem; " type="button">
+                        <a href="{% url 'project-requests' post.slug%}" style="color: black; text-decoration: none;">
+                            <b>View Panding request</b> </a>
+                    </button></span>
+                <!--Butten End-->
+            </div>
+
+            <div>
+                <!--Butten Start-->
+                <span>
+                    <button class="btn profile-button edit-butten-Add-css-new"
+                        style="font-size: 2.2rem;  padding-top: 0rem; " type="button">
+                        <a href="{% url 'project-notification-create' post.slug%}" style="color: black; text-decoration: none;">
+                            <b>Notify the team</b> </a>
+                    </button></span>
+                <!--Butten End-->
+            </div>
+
+            <div>
+                <!--Butten Start-->
+                <span>
+                    <button class="btn profile-button edit-butten-Add-css-new"
+                        style="font-size: 2.2rem;  padding-top: 0rem; " type="button">
+                        <a href="{% url 'project-create-event' post.slug%}" style="color: black; text-decoration: none;">
+                            <b>Create Event</b> </a>
+                    </button></span>
+                <!--Butten End-->
+            </div>
+
+            <div>
+                <!--Butten Start-->
+                <span>
+                    <button class="btn profile-button edit-butten-Add-css-new"
+                        style="font-size: 2.2rem;  padding-top: 0rem; " type="button">
+                        <a href="{% url 'project-edit' post.slug%}" style="color: black; text-decoration: none;">
+                            <b>Edit Project</b> </a>
+                    </button></span>
+                <!--Butten End-->
+            </div>
+            <div>
+                <!--Butten Start-->
+                <span>
+                    <button class="btn profile-button edit-butten-Add-css-new"
+                        style="font-size: 2.2rem;  padding-top: 0rem; " type="button">
+                        <a href="{% url 'project-delete' post.slug%}" style="color: black; text-decoration: none;">
+                            <b>Delete Project</b> </a>
+                    </button></span>
+                <!--Butten End-->
+            </div>
+            {%endif%}
+            {%if in_team %}
+            <div>
+                <!--Butten Start-->
+                <span>
+                    <button class="btn profile-button edit-butten-Add-css-new"
+                        style="font-size: 2.2rem;  padding-top: 0rem; " type="button">
+                        <a href="{% url 'project-mom' post.slug%}" style="color: black; text-decoration: none;">
+                            <b>View Project progress</b> </a>
+                    </button></span>
+                <!--Butten End-->
+            </div>
+            {%endif%}
+        </div>
+    </div>
+    <!--Main Section End-->
+
+    {%endblock block2%}

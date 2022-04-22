@@ -12,7 +12,8 @@ urlpatterns = [
     path("myprojects/<int:profile_id>", views.myprojects, name="myprojects"),
     path("profile/<int:profile_id>", views.profile, name="profile"),
     path("profile/<int:profile_id>/edit", views.profileEdit, name="profile-edit"),
-    path("timetable", views.timetable, name="timetable"),
+    path("events", views.events, name="events"), #display events
+    path("project/<slug:slug_text>/createevent", views.projectCreateEvent, name="project-create-event"),#create events for specific project. NO editing or deleting of events allowed
     path("notification", views.notification, name="notification"),
     path("project/<slug:slug_text>", views.project, name="project"),
     path("project/<slug:slug_text>/edit", views.projectEdit, name="project-edit"),
@@ -25,5 +26,11 @@ urlpatterns = [
     path("project/<slug:slug_text>/requests", views.projectRequests, name="project-requests"),
     path("project/<slug:slug_text>/requests/accept/<int:profile_id>", views.projectRequestsAccept, name="project-accept"),
     path("project/<slug:slug_text>/requests/decline/<int:profile_id>", views.projectRequestsDecline, name="project-decline"),
+
+
+    path("trial", views.trial, name="trial"),
+
+
+
 ]
 

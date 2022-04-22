@@ -1,84 +1,57 @@
+{% extends 'myBase.html'%}
+
 {% load static %}
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+{%block block1%}
+<title>My Projects</title>
+<link rel="stylesheet" href="{%static 'CSS/Homepage.css' %}">
+{%endblock block1%}
+{%block block2%}
+<!--Main part start-->
 
-    <title>DAIICT</title>
-  </head>
-
-  <body >
-    <nav class="navbar navbar-expand-lg navbar-light bg-light"  style="background-color: #e3f2fd;">
-        <a class="navbar-brand" href="#">DAIICT</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-              <a class="nav-link" href="logout">Logout</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'profile' id %}">Profile</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'myprojects' id %}">My Projects</a>
-            </li>
-            {% if not is_student %}
-            <li class="nav-item">
-              <a class="nav-link" href="create-project">create project</a>
-            </li>
-            {%endif%}
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="timetable">Timetable</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="notification">Notification</a>
-            </li>>
-            {% else %}	
-            <li class="nav-item">
-              <a class="nav-link" href="register">Register</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="login">Login</a>
-            </li>
-            {% endif %}
-
-          </ul>
+        <!--Search Bar Start-->
+        <div class="main-container-css" style=" text-align: center; margin-left: 5%; margin-right: 5%;">
+            <form class="d-flex" action="myprojects" method="post">
+                {% csrf_token %}
+                <input class="form-control me-2" style="display: inline-block; 
+                background-color: #52AB98; height: 5rem; border-radius: 34px; color: black; 
+                border: 0px;  max-width: 105rem; margin-right: 2rem; margin-bottom: 0.5rem;" type="search"
+                    placeholder="" aria-label="Search" type="text" name="search_value" placeholder="" value="">
+                <button class="btn btn-outline-success search-butten-css" style="display: inline-block; border: 0px; padding-top: 0px;
+                font-size: 3rem; border-radius: 34px; margin-bottom: 1px;" type="submit" >Search</button>
+            </form>
         </div>
-      </nav>
-      {% if user.is_authenticated %}
+        <!--Search Bar End-->
 
-      <h1>hello, {{user.username}}</h1>
+        <!--Project Name Section Start-->
+        <div>
+            {% for a in projects %}
+            <!--Div 1-->
+            <div class="card Rectangle-css">
+                <div class="card-body">
+                    <p class="card-text project-name-css">
+                        <b class="b-project-name-css">Project ID:</b>
+                        <span class="span-project-name-css">2022-JP-001</span>
+                    </p>
+                    <p class="card-text project-name-css">
+                        <b class="b-project-name-css">Project Name:</b>
+                        <span class="span-project-name-css">{{a.title}}</span>
+                    </p>
+                    <p class="card-text project-name-css">
+                        <b class="b-project-name-css">Professor Name:</b>
+                        <span class="span-project-name-css">{{a.author.username}}</span>
+                    </p>
+                    <p class="card-text project-name-css">
+                      <b class="b-project-name-css">Total Applications:</b>
+                      <span class="span-project-name-css">{{a.total_applications}}</span>
+                  </p>
+                    <a href="{% url 'project' a.slug %}"class="btn button-project-name-css"
+                        style="font-size: 2rem;border: 0rem; padding: 0px; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+                        Learn More </a>
+                </div>
+            </div>
+            {% endfor %}
 
-      <h2>Open Projects: </h2>
-      <form action="homepage" method="post">
-        {% csrf_token %}
-      <input type="text" name="search_value" placeholder="search"><br>
-      <input type="Submit">
-      </form>
-
-      {% for a in projects %}
-      <a href="{% url 'project' a.slug %}"">{{a.title}}</a><br>
-      {% endfor %}
-
-      {% endif %}
-
-      <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
-</html>
+        </div>
+        <!--Project Name Section end-->
+{%endblock block2%}

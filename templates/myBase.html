@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%block block1%}{%endblock block1%}
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap");
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="main-main-container-css">
+        <!--Nav Bar Start-->
+        <nav class="navbar navbar-fixed-top" style="background-color: #2B6777; ">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu"
+                        style="background-color: #DFC63E; color: white;">
+                        <spam class="icon-bar" style="font-size: 10px; color: white;">
+                            <img src="{%static 'Img/3-line.jpg' %}" alt="3-Line" style="height: 22px; margin-top: -5px;">
+                        </spam>
+                        <spam class="icon-bar"></spam>
+                        <spam class="icon-bar"></spam>
+                    </button>
+                    <figure>
+                        <img src="{%static 'Img/DA - Logo.jpg' %}" class="img-fluid DA-Logo-img" alt="DA-IICT Logo">
+                    </figure>
+                </div>
+                <div class="collapse navbar-collapse" id="menu">
+                    <ul class="nav navbar-nav" style="float: right;">
+                        <li><a class="nav-butten-css" href="{% url 'homepage' %}">Home Page</a></li>
+                        <li><a class="nav-butten-css" href="{% url 'myprojects' user.id %}">My Project</a></li>
+                        {% if not is_student %}
+                        <li><a  class="nav-butten-css" Style="padding-top: 0.5rem" href="{% url 'create-project' %}">Create Project</a></li>
+                        {%endif%}
+                        <li><a class="nav-butten-css" href="{% url 'events' %}">Events</a></li>
+                        <li><a class="nav-butten-css" href="{% url 'profile' user.id %}">Profile</a></li>                        
+                        <li><a class="nav-butten-css" href="{% url 'notification' %}">Notification </a></li>
+                        <li><a class="nav-butten-css" href="{% url 'logout' %}">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!--Nav Bar End-->
+        {%block block2%}{%endblock block2%}
+    </div>
+</body>
+
+</html>

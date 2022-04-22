@@ -1,26 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form action="edit" method="post">    
-        {% csrf_token %}
-        <input type="text" value={{user.username}} name="username" placeholder="username" readonly><br>
-        <input type="text" value="{{u.first_name}}" name="first_name" placeholder="first_name" ><br>
-        <input type="text" value="{{u.last_name}}" name="last_name" placeholder="last_name" ><br>
-        <input type="text" value="{{q.cpi}}" name="cpi" placeholder="cpi" ><br>
-        <input type="text" value="{{q.course}}" name="course" placeholder="course" ><br>
-        <input type="Submit">
-    </form>
+{% extends 'myBase.html'%}
 
-    <div>
-        {% for message in messages %}
-        <h3> {{message}}  </h3>
-        {% endfor %}
+{% load static %}
+
+{%block block1%}
+<title>Profile Edit</title>
+<link rel="stylesheet" href="{%static 'CSS/EditProfile.css' %}">
+{%endblock block1%}
+{%block block2%}
+
+<!--Profile start-->
+<div class="main-Profile-container-css">
+    <span class="profile-edit-css">
+        <b>Profile</b>
+    </span>
+</div>
+
+<form action="edit" method="post">
+    {% csrf_token %}
+<div class="container rounded">
+    <div class="row">
+        <div class=" border-right img-canter-css" style="float: left; ">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <img class="rounded-circle mt-5" style="border-radius: 150px; width:100%; float:left;"
+                    src="{%static 'Img/image.png' %}">
+            </div>
+        </div>
+
+
+        <div class="col-css">
+            <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
+                <label class="labels" style="width: 17rem;">First name: </label>
+                <tr>
+                    <input class="input-box-css" type="text"value="{{u.first_name}}" name="first_name" placeholder="first_name">
+                </tr>
+            </div>
+
+            <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
+                <label class="labels" style="width: 17rem;">Last name: </label>
+                <tr>
+                    <input class="input-box-css"value="{{u.last_name}}" name="last_name" placeholder="last_name" >
+                </tr>
+            </div>
+
+            <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
+                <label class="labels" style="width: 17rem;"> Email ID: </label>
+                <tr>
+                    <input class="input-box-css" type="text" name="" value="201801207@daiict.ac.in"
+                        placeholder="Email ID:" disabled>
+                </tr>
+            </div>
+
+            <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
+                <label class="labels" style="width: 17rem;">Course: </label>
+                <tr>
+                    <input class="input-box-css" value="{{q.course}}" name="course" placeholder="course">
+                </tr>
+            </div>
+
+
+            <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
+                <label class="labels" style="width: 17rem;">CPI: </label>
+                <tr>
+                    <input class="input-box-css" value="{{q.cpi}}" name="cpi" placeholder="cpi">
+                </tr>
+            </div>
+
+            <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
+                <label class="labels" style="width: 17rem;">Status: </label>
+                <tr>
+                    <input class="input-box-css" type="text" name="" value="Project Not taken"
+                        placeholder="Project Status" disabled>
+                </tr>
+            </div>
+
+            <span style="margin-left: 5%;">
+                <button class="btn profile-button edit-butten-css"
+                    style="font-size: 3rem; border-radius: 2rem; padding-top: 0rem; margin-top: 2rem;" type="submit">
+                    <a style="color: black; text-decoration: none;">
+                        Save </a>
+                </button>
+            </span>
+
+
+        </div>
     </div>
-</body>
-</html>
+</div>
+</form>
+<!--Profile End-->
+
+{%endblock block2%}
