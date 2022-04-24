@@ -48,6 +48,11 @@ class ProjectMember(models.Model):
     project=models.ManyToManyField(BtpProject)
     name=models.ForeignKey(User, on_delete=models.CASCADE, default="")
     accept_status=models.CharField(max_length=100, choices=options, default='rejected')
+    options2={
+        ('taken','taken'),
+        ('not taken','not taken'),
+    }
+    student_status=models.CharField(max_length=100, choices=options2, default='not taken')
 
 class Mom(models.Model):
     date = models.DateField(default=timezone.now)

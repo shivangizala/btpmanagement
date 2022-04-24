@@ -49,7 +49,7 @@
                         placeholder="Email ID:" disabled>
                 </tr>
             </div>
-
+            {%if q.is_student%}
             <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
                 <label class="labels" style="width: 17rem;">Course: </label>
                 <tr>
@@ -57,22 +57,17 @@
                 </tr>
             </div>
 
-
+            
             <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
                 <label class="labels" style="width: 17rem;">CPI: </label>
                 <tr>
                     <input class="input-box-css" value="{{q.cpi}}" name="cpi" placeholder="cpi">
                 </tr>
             </div>
-
-            <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
-                <label class="labels" style="width: 17rem;">Status: </label>
-                <tr>
-                    <input class="input-box-css" type="text" name="" value="Project Not taken"
-                        placeholder="Project Status" disabled>
-                </tr>
-            </div>
-
+            {%else%}            
+                    <input type="hidden" class="input-box-css" value="{{q.course}}" name="course" placeholder="course">
+                    <input  type="hidden" class="input-box-css" value="{{q.cpi}}" name="cpi" placeholder="cpi">
+            {%endif%}
             <span style="margin-left: 5%;">
                 <button class="btn profile-button edit-butten-css"
                     style="font-size: 3rem; border-radius: 2rem; padding-top: 0rem; margin-top: 2rem;" type="submit">

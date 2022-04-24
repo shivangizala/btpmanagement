@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User, auth
 from .models import *
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
+
 # from django.core.mail import send_mail
 # print("11111111111111111111")
 # print(u)
@@ -53,7 +55,7 @@ def events(request):
         pass
     else:
         u=get_object_or_404(User, username=request.user.username)  
-        all_events=Event.objects.filter( name_id=u.id)
+        all_events=Event.objects.filter( name_id=u.id).order_by('-date')
         context={
             'all_events':all_events,
         }
@@ -110,7 +112,7 @@ def projectMom(request, slug_text):
             else:
                 in_team=False
                 return HttpResponse("<h1>page not found</h1>")
-        all_mom = Mom.objects.filter( project__id=q.id)
+        all_mom = Mom.objects.filter( project__id=q.id).order_by('date')
         context={
             'team_prof':team_prof,
             'in_team':in_team,
@@ -192,13 +194,16 @@ def projectRequestsAccept(request, slug_text, profile_id):
         value = request.POST['value']
         if value=='accept':
             pm = ProjectMember.objects.filter( project__id=q.id,name_id=profile_id)
+            ProjectMember.objects.filter( name_id=profile_id).update(student_status='taken')
             pm=pm.first()
             pm.accept_status='accepted'
             pm.save()
-            u=get_object_or_404(User, username=request.user.username)
             content= "you are accepted in "+ q.title
             n = Notification.objects.create(name_id=profile_id, content=content)
             n.save()
+            #below lines for updating in projectMember's student_status field
+            # ss=get_object_or_404(CollegePeople, name_id=profile_id)
+            # ss.update(student_status='taken')
         # else: #value=decline
         #     pm = ProjectMember.objects.filter( project__id=q.id,name_id=profile_id)
         #     pm=pm.first()
@@ -215,12 +220,15 @@ def projectRequestsDecline(request, slug_text, profile_id):
         value = request.POST['value']
         if value=='decline':
             pm = ProjectMember.objects.filter( project__id=q.id,name_id=profile_id)
+            ProjectMember.objects.filter( name_id=profile_id).update(student_status='not taken')
             pm=pm.first()
             pm.delete()
-            u=get_object_or_404(User, username=request.user.username)
             content= "you are rejected in "+ q.title
             n = Notification.objects.create(name_id=profile_id, content=content)
             n.save()
+            #below lines for updating in projectMember's student_status field
+            # ss=get_object_or_404(CollegePeople, name_id=profile_id)
+            # ss.update(student_status='not taken')
         url='/project/'+slug_text+'/requests' #vvvvvvvvvvvvimp
         return redirect(url)
     else:
@@ -235,10 +243,11 @@ def projectRequests(request, slug_text):
         q=get_object_or_404(BtpProject, slug=slug_text)
         pm = ProjectMember.objects.filter( project__id=q.id, accept_status='requested')
         all_requests=pm
-        context={
+        context={ #how can i send student_status from here of CollegePeople
             'all_requests':all_requests,
             'title':q.title,
             'slug':slug_text,
+
         }
         #check if its the same user
         if u.id==q.author_id:    
@@ -375,7 +384,6 @@ def projectDelete(request, slug_text):
     else:
         return HttpResponse("<h1>page not found</h1>")
     
-
 @login_required(login_url='/')
 def projectEdit(request, slug_text):
     q=get_object_or_404(BtpProject,slug=slug_text)
@@ -429,20 +437,24 @@ def createProject(request):
 def homepage(request):
     if request.method == 'POST':
         search_value = request.POST['search_value']
-        #serach value is username/author
-        user1=User.objects.filter(username=search_value)
-        for u in user1:
-            author_id=u.id     
-        all_projects=BtpProject.objects.filter(author_id=author_id, status='open')
+        u=get_object_or_404(User, username=request.user.username)
+        q=get_object_or_404(CollegePeople, name_id=u.id)
+        all_projects=BtpProject.objects.filter(status='open')
+        is_student=q.is_student
+        all_projects=BtpProject.objects.filter(title__icontains=search_value, status='open').order_by('-total_applications')
+        # multiple_q = Q(Q(title__icontains=search_value) | Q(author_id__icontains=search_value) | Q(status='open'))
+        # all_projects = BtpProject.objects.filter(multiple_q)
         context={
-            'projects':all_projects
+            'projects':all_projects,
+            'is_student': is_student,
+            'id':u.id, 
         }
         return render(request,'homepage.html', context)
     else:
         #whole below process to check if the user is is_Student or not
         u=get_object_or_404(User, username=request.user.username)
         q=get_object_or_404(CollegePeople, name_id=u.id)
-        all_projects=BtpProject.objects.filter(status='open')
+        all_projects=BtpProject.objects.filter(status='open').order_by('-total_applications')
         is_student=q.is_student
         context={
             'projects':all_projects,
@@ -457,9 +469,9 @@ def myprojects(request, profile_id): #id of person who created it
     c=get_object_or_404(CollegePeople, name_id=u.id)
     is_student=c.is_student
     if c.is_student==False:
-        all_projects=BtpProject.objects.filter(author_id=u.id)
+        all_projects=BtpProject.objects.filter(author_id=u.id).order_by('status')
     else:
-        all_projects = ProjectMember.objects.filter( name_id=u.id)
+        all_projects = ProjectMember.objects.filter( name_id=u.id).order_by('status')
     if u.id==profile_id:    
         same_user=True
     else:
@@ -508,7 +520,6 @@ def login(request):
         return render(request,'login.html')  
 
 def register(request):
-
     if request.method == 'POST':
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']

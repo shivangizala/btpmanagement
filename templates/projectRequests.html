@@ -30,7 +30,7 @@
                     <!-- #vvvvimp -->
                     <a href="{% url 'profile' each_request.name.id %}"> {{each_request.name.email}}</a>
                 </td>
-                <td>Project Not taken</td>
+                <td>{{each_request.student_status}}</td>
                 <td>
                     <!--Accept Butten Start-->
                     <form action="{% url 'project-accept' slug each_request.name.id%}" method="post">
