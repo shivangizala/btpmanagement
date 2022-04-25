@@ -36,37 +36,43 @@ body {
   text-align: center;
   font-family: abril Fatface;
 }
-
-@media (max-width: 1266px) {
+@media (max-width: 1462px) {
   nav .nav-butten-css {
     font-size: 2.5rem;
     width: 16rem;
   }
 }
 
-@media (max-width: 1110px) {
+@media (max-width: 1280px) {
+  nav .nav-butten-css {
+    font-size: 2.2rem;
+    width: 15rem;
+  }
+}
+
+@media (max-width: 1210px) {
   nav .nav-butten-css {
     font-size: 2rem;
     width: 13.4rem;
-    margin-left: 0.8rem;
+    margin-left: 0.7rem;
   }
 }
 
-@media (max-width: 941px) {
+@media (max-width: 1078px) {
   nav .nav-butten-css {
-    font-size: 1.8rem;
-    width: 12.4rem;
-    margin-left: 0.5rem;
-  }
-}
-@media (max-width: 805px) {
-  nav .nav-butten-css {
-    font-size: 1.5rem;
-    width: 11rem;
+    font-size: 1.7rem;
+    width: 11.8rem;
     margin-left: 0.5rem;
   }
 }
 
+@media (max-width: 951px) {
+  nav .nav-butten-css {
+    font-size: 1.3rem;
+    width: 9.8rem;
+    margin-left: 0.5rem;
+  }
+}
 .main-Profile-container-css {
   margin-top: 13.5rem;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
