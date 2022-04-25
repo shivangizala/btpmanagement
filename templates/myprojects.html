@@ -11,10 +11,10 @@
         <!-- <h1>All the projects of user:{{user.username}}</h1>  -->
         <!--Search Bar Start-->
         <div class="main-container-css" style=" text-align: center; margin-left: 5%; margin-right: 5%;">
-            <form class="d-flex" action="myprojects" method="post">
+            <form class="d-flex" action="{% url 'myprojects'  profile_id%}" method="post">
                 {% csrf_token %}
                 <input class="form-control me-2" style="display: inline-block;  background-color: #52AB98; height: 5rem; border-radius: 34px; color: black; border: 0px;  max-width: 105rem; margin-right: 2rem; margin-bottom: 0.5rem;" type="text"
-                name="search_value" placeholder="search" value="search" aria-label="Search" name="search_value" >
+                name="search_value"  aria-label="Search" name="search_value" >
                 <button class="btn btn-outline-success search-butten-css" style="display: inline-block; border: 0px; padding-top: 0px;
                 font-size: 3rem; border-radius: 34px; margin-bottom: 1px;" type="submit" >Search</button>
             </form>

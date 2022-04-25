@@ -40,6 +40,7 @@
                 <b class="b-project-name-css">Points:</b>
                 <span class="span-project-name-css">{{a.points}}</span>
             </p>
+            {%if team_prof%}
             <!--edit Butten Start-->
             <span>
                 <button class="btn profile-button" style="font-size: 2.2rem; padding-top: 0rem; 
@@ -60,6 +61,7 @@
                 </button>
             </span>
             <!-- Delete Butten End -->
+            {%endif%}
         </div>
     </div>
     {%endfor%}

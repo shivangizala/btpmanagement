@@ -55,9 +55,12 @@ def events(request):
         pass
     else:
         u=get_object_or_404(User, username=request.user.username)  
+        q=get_object_or_404(CollegePeople, name_id=u.id)
         all_events=Event.objects.filter( name_id=u.id).order_by('-date')
+        is_student=q.is_student
         context={
             'all_events':all_events,
+            'is_student':is_student
         }
         return render(request,'events.html', context) 
 
@@ -113,12 +116,14 @@ def projectMom(request, slug_text):
                 in_team=False
                 return HttpResponse("<h1>page not found</h1>")
         all_mom = Mom.objects.filter( project__id=q.id).order_by('date')
+        is_student=c.is_student
         context={
             'team_prof':team_prof,
             'in_team':in_team,
             'all_mom':all_mom,
             'title':q.title,
-            'slug':q.slug
+            'slug':q.slug,
+            'is_student':is_student
         }
         return render(request,'projectMom.html', context)  
 
@@ -262,15 +267,17 @@ def profile(request, profile_id):
     else:
         u=get_object_or_404(User, id=profile_id)
         u2=get_object_or_404(User, username=request.user.username)
-        q=get_object_or_404(CollegePeople, name_id=u.id)
+        q=get_object_or_404(CollegePeople, name_id=u2.id)
         if u2.id==profile_id:
             same_user=True
         else:
             same_user=False
+        is_student=q.is_student
         context={
             'u':u, #user object
             'q':q, #cp object
-            'same_user':same_user
+            'same_user':same_user,
+            'is_student':is_student
         }
         return render(request,'profile.html', context)
 
@@ -465,30 +472,55 @@ def homepage(request):
 
 @login_required(login_url='/')
 def myprojects(request, profile_id): #id of person who created it
-    u=get_object_or_404(User, username=request.user.username)#person who is trying to access
-    c=get_object_or_404(CollegePeople, name_id=u.id)
-    is_student=c.is_student
-    if c.is_student==False:
-        all_projects=BtpProject.objects.filter(author_id=u.id).order_by('status')
+    if request.method == 'POST':
+        search_value = request.POST['search_value']
+        u=get_object_or_404(User, username=request.user.username)
+        c=get_object_or_404(CollegePeople, name_id=u.id)
+        is_student=c.is_student
+        if c.is_student==False:
+            all_projects=BtpProject.objects.filter(author_id=u.id, title__icontains=search_value).order_by('status').order_by('projectid')
+        else:
+            all_projects = ProjectMember.objects.filter( name_id=u.id, project__title__icontains=search_value).order_by('accept_status')
+        if u.id==profile_id:    
+            same_user=True
+        else:
+            same_user=False
+        context={
+            "all_projects":all_projects,
+            'is_student':is_student,
+            'same_user': same_user,
+            'profile_id':profile_id
+        }
+        return render(request,'myprojects.html',context)  
+        
     else:
-        all_projects = ProjectMember.objects.filter( name_id=u.id).order_by('accept_status')
-    if u.id==profile_id:    
-        same_user=True
-    else:
-        same_user=False
-    context={
-        "all_projects":all_projects,
-        'is_student':is_student,
-        'same_user': same_user
-    }
-    return render(request,'myprojects.html',context)  
+        u=get_object_or_404(User, username=request.user.username)#person who is trying to access
+        c=get_object_or_404(CollegePeople, name_id=u.id)
+        is_student=c.is_student
+        if c.is_student==False:
+            all_projects=BtpProject.objects.filter(author_id=u.id).order_by('status')
+        else:
+            all_projects = ProjectMember.objects.filter( name_id=u.id).order_by('accept_status')
+        if u.id==profile_id:    
+            same_user=True
+        else:
+            same_user=False
+        context={
+            "all_projects":all_projects,
+            'is_student':is_student,
+            'same_user': same_user,
+            'profile_id':profile_id
+        }
+        return render(request,'myprojects.html',context)  
 
 @login_required(login_url='/')
 def notification(request):
     u=get_object_or_404(User, username=request.user.username)
+    b=get_object_or_404(CollegePeople, name_id=u.id)
     q=Notification.objects.filter(name_id=u.id).order_by('-moment')
     context={
-        'q':q
+        'q':q,
+        'is_student':b.is_student
     }
     return render(request,'notification.html',context)  
     

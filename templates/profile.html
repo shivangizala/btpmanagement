@@ -4,7 +4,7 @@
 
 {%block block1%}
 <title>My Profile</title>
-<link rel="stylesheet" href="{%static 'CSS/Profile.css' %}">
+<link rel="stylesheet" href="{%static 'CSS/profile.css' %}">
 {%endblock block1%}
 {%block block2%}
 
@@ -33,53 +33,53 @@
 
         {%if q.is_student%}
         <div class="col-css" style="height:27rem">
-        {%else%}
-        <div class="col-css" style="height:17rem">
-        {%endif%}
-            <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
-                <label class="labels" style="width: 17rem;">First name: </label>
-                <tr>
-                    <span style="margin-left: 2rem;">{{u.first_name}}
-                    </span>
-                </tr>
-            </div>
+            {%else%}
+            <div class="col-css" style="height:17rem">
+                {%endif%}
+                <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
+                    <label class="labels" style="width: 17rem;">First name: </label>
+                    <tr>
+                        <span style="margin-left: 2rem;">{{u.first_name}}
+                        </span>
+                    </tr>
+                </div>
 
-            <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
-                <label class="labels" style="width: 17rem;">Last name: </label>
-                <tr>
-                    <span style="margin-left: 2rem;">{{u.last_name}}
-                    </span>
-                </tr>
-            </div>
+                <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
+                    <label class="labels" style="width: 17rem;">Last name: </label>
+                    <tr>
+                        <span style="margin-left: 2rem;">{{u.last_name}}
+                        </span>
+                    </tr>
+                </div>
 
-            <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
-                <label class="labels" style="width: 17rem;"> Email ID: </label>
-                <tr>
-                    <span style="margin-left: 2rem;">{{u.email}}
-                    </span>
-                </tr>
-            </div>
+                <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
+                    <label class="labels" style="width: 17rem;"> Email ID: </label>
+                    <tr>
+                        <span style="margin-left: 2rem;">{{u.email}}
+                        </span>
+                    </tr>
+                </div>
 
-            {%if q.is_student%}
-            <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
-                <label class="labels" style="width: 17rem;">course: </label>
-                <tr>
-                    <span style="margin-left: 2rem;">{{q.course}}
-                    </span>
-                </tr>
-            </div>
+                {%if q.is_student%}
+                <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
+                    <label class="labels" style="width: 17rem;">course: </label>
+                    <tr>
+                        <span style="margin-left: 2rem;">{{q.course}}
+                        </span>
+                    </tr>
+                </div>
 
-            
-            <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
-                <label class="labels" style="width: 17rem;">CPI: </label>
-                <tr>
-                    <span style="margin-left: 2rem;">{{q.cpi}}
-                    </span>
-                </tr>
+
+                <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
+                    <label class="labels" style="width: 17rem;">CPI: </label>
+                    <tr>
+                        <span style="margin-left: 2rem;">{{q.cpi}}
+                        </span>
+                    </tr>
+                </div>
+                {%endif%}
             </div>
-            {%endif%}
         </div>
     </div>
-</div>
-<!--Profile End-->
-{%endblock block2%}
+    <!--Profile End-->
+    {%endblock block2%}
