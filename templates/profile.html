@@ -31,8 +31,11 @@
         </div>
 
 
-
-        <div class="col-css">
+        {%if q.is_student%}
+        <div class="col-css" style="height:27rem">
+        {%else%}
+        <div class="col-css" style="height:17rem">
+        {%endif%}
             <div class="col-md-12 col-name-line-css" style="font-size: 3rem;">
                 <label class="labels" style="width: 17rem;">First name: </label>
                 <tr>

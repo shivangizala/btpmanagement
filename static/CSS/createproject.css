@@ -39,6 +39,7 @@ body {
   color: black;
   margin-left: 1rem;
   text-align: center;
+  font-family: abril Fatface;
 }
 
 @media (max-width: 1462px) {

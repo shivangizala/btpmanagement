@@ -21,7 +21,7 @@ from django.db.models import Q
 #     else:
 #         return render(request,'project.html', context)  
 
-@login_required(login_url='/')
+# @login_required(login_url='/')
 def trial(request):
     return render(request,'trial.html')  
 
@@ -471,7 +471,7 @@ def myprojects(request, profile_id): #id of person who created it
     if c.is_student==False:
         all_projects=BtpProject.objects.filter(author_id=u.id).order_by('status')
     else:
-        all_projects = ProjectMember.objects.filter( name_id=u.id).order_by('status')
+        all_projects = ProjectMember.objects.filter( name_id=u.id).order_by('accept_status')
     if u.id==profile_id:    
         same_user=True
     else:
