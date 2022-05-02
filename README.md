@@ -6,9 +6,6 @@ Figma-UI:https://www.figma.com/file/DWqmCESItcbVVjZbSWFsJ5/BTP-2022
 
 Video-demo: https://youtu.be/UF34gIyUL8w
 
-Srs document: 
-
-
 Commands to run:
 - Connect to postgres database
 - Python manage.py runserver
