@@ -267,17 +267,22 @@ def profile(request, profile_id):
     else:
         u=get_object_or_404(User, id=profile_id)
         u2=get_object_or_404(User, username=request.user.username)
-        q=get_object_or_404(CollegePeople, name_id=u2.id)
+        q=get_object_or_404(CollegePeople, name_id=u2.id)#cp of person who is trying to access
+        q2=get_object_or_404(CollegePeople, name_id=u.id)#cp of student or profs that is in url
+        is_url_student=q2.is_student
         if u2.id==profile_id:
             same_user=True
         else:
             same_user=False
-        is_student=q.is_student
+        is_student=q.is_student #for navbar 'create project ' button condition
         context={
             'u':u, #user object
             'q':q, #cp object
             'same_user':same_user,
-            'is_student':is_student
+            'is_student':is_student, #for navbar 'create project ' button condition
+            'is_url_student':is_url_student,#is the person in url a student?
+            'q2':q2
+
         }
         return render(request,'profile.html', context)
 
@@ -296,11 +301,13 @@ def profileEdit(request, profile_id):
     else:
         u=get_object_or_404(User, username=request.user.username)
         q=get_object_or_404(CollegePeople, name_id=u.id)
+        is_student=q.is_student
         context={
             'u':u, #user object
-            'q':q #cp object
+            'q':q, #cp object
+            'is_student':is_student
         }
-        if u.id==profile_id:
+        if u.id==profile_id:       
             return render(request,'profileEdit.html', context)
         else:
             return HttpResponse("<h1>page not found</h1>")
