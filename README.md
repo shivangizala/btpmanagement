@@ -4,7 +4,9 @@ Project Description and SRS file can be fouind here:https://docs.google.com/docu
 
 Figma-UI:https://www.figma.com/file/DWqmCESItcbVVjZbSWFsJ5/BTP-2022
 
-Video-demo: https://youtu.be/UF34gIyUL8w
+Snapshots: https://www.canva.com/design/DAE_iE5VdDc/09mxFWu1KNas84Y_Hr6f0w/view?utm_content=DAE_iE5VdDc&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
+Video demo:https://youtu.be/YPSvRg5c-Bc
 
 Commands to run:
 - Connect to postgres database
